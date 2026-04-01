@@ -4,11 +4,11 @@ Rural Safety Guardian is a community focused safety project designed for small t
 
 ## Features
 
-• Severe weather alerts  
-• Local emergency resources  
-• Cybersecurity basics for families  
-• Community safety reminders  
-• Easy to understand guidance  
+- Severe weather alerts
+- Local emergency resources
+- Cybersecurity basics for families
+- Community safety reminders
+- Easy to understand guidance
 
 ## Purpose
 
