@@ -1,19 +1,10 @@
-# Ignore system files
-.DS_Store
+﻿.DS_Store
 Thumbs.db
-
-# Ignore temporary files
 *.tmp
 *.log
-
-# Ignore editor files
 .vscode/
 .idea/
-
-# Ignore build or output folders
 dist/
 build/
-
-# Ignore Python virtual environments
 venv/
 __pycache__/

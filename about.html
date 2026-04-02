@@ -1,0 +1,210 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Rural Safety Guardian</title>
+  <meta name="description" content="Learn the mission, purpose, and practical use of the Rural Safety Guardian project.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .about-shell { display: grid; gap: 22px; }
+    .about-stack { display: grid; gap: 18px; margin-top: 22px; }
+    .about-card { padding: 22px; border-radius: var(--radius); border: 1px solid var(--barnwood-brown); background: rgba(250, 247, 242, 0.96); box-shadow: var(--shadow); }
+    .about-card p,
+    .about-card li { line-height: 1.7; }
+    .about-card p,
+    .about-card ol,
+    .about-card ul { margin: 0; }
+    .about-card ul,
+    .about-card ol { padding-left: 20px; }
+    .about-card li + li { margin-top: 10px; }
+  </style>
+</head>
+<body>
+  <div class="site-menu screen-only" id="site-menu">
+    <button class="button ghost site-menu-button" type="button" id="site-menu-button" aria-expanded="false">Menu &#9662;</button>
+    <div class="site-menu-panel" id="site-menu-panel">
+      <div class="site-menu-group">
+        <button class="site-menu-group-toggle" type="button" aria-expanded="false">Guides</button>
+        <div class="site-menu-group-panel">
+          <a class="site-menu-link" href="weather-readiness.html">Weather Readiness</a>
+          <a class="site-menu-link" href="hazard-safety.html">Hazard Safety</a>
+          <a class="site-menu-link" href="emergency-kits.html">Emergency Kits &amp; Go-Bags</a>
+          <a class="site-menu-link" href="emergency-planning.html">Emergency Planning</a>
+          <a class="site-menu-link" href="cyber-safety.html">Cyber Safety Basics</a>
+        </div>
+      </div>
+      <div class="site-menu-group">
+        <button class="site-menu-group-toggle" type="button" aria-expanded="false">Tools</button>
+        <div class="site-menu-group-panel">
+          <a class="site-menu-link" href="lost-animals.html">Lost Animals Tracker</a>
+          <a class="site-menu-link" href="weather-outages.html">Weather &amp; Outages Dashboard</a>
+          <a class="site-menu-link" href="road-conditions.html">Road Conditions &amp; Travel Safety</a>
+        </div>
+      </div>
+      <div class="site-menu-group">
+        <button class="site-menu-group-toggle" type="button" aria-expanded="false">Local Resources</button>
+        <div class="site-menu-group-panel">
+          <a class="site-menu-link" href="local-contacts.html">Local Contacts &amp; Resources</a>
+          <a class="site-menu-link" href="lost-pets-livestock.html">Lost Pets &amp; Livestock</a>
+          <a class="site-menu-link" href="local-contacts.html#official-emergency-resources">Official Emergency Resources (U.S.)</a>
+        </div>
+      </div>
+      <div class="site-menu-group">
+        <button class="site-menu-group-toggle" type="button" aria-expanded="false">Printables</button>
+        <div class="site-menu-group-panel">
+          <a class="site-menu-link" href="preparedness-cards.html">Printable Preparedness Cards</a>
+        </div>
+      </div>
+      <div class="site-menu-group">
+        <button class="site-menu-group-toggle" type="button" aria-expanded="false">About</button>
+        <div class="site-menu-group-panel">
+          <a class="site-menu-link" href="about.html">About This Project</a>
+        </div>
+      </div>
+      <div class="site-menu-group">
+        <button class="site-menu-group-toggle" type="button" aria-expanded="false">Home</button>
+        <div class="site-menu-group-panel">
+          <a class="site-menu-link" href="index.html">Home (Dashboard)</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="page-shell">
+    <header class="hero">
+      <nav class="topbar">
+        <div class="brand">
+          <span class="brand-mark">RG</span>
+          <div>
+            <p class="eyebrow">Community Safety Hub</p>
+            <h1>About Rural Safety Guardian</h1>
+          </div>
+        </div>
+        <div class="nav-actions">
+          <a class="button ghost screen-only" href="index.html">Back to Main Site</a>
+        </div>
+      </nav>
+      <div class="hero-grid">
+        <section class="hero-copy">
+          <p class="eyebrow">Mission</p>
+          <h2>Give rural households one clear place to find practical safety guidance before and during an emergency.</h2>
+          <p class="lede">Rural Safety Guardian is built to make it easier to prepare early, act calmly, and keep important information close when weather, outages, travel hazards, cyber risks, or animal emergencies disrupt normal routines.</p>
+        </section>
+        <aside class="status-panel">
+          <p class="panel-title">Project Focus</p>
+          <div class="status-card">
+            <span class="status-label">Built for real-life use</span>
+            <strong>Simple, practical, rural-ready</strong>
+            <p>This project is designed around the reality that rural families may face longer response times, weaker signal coverage, longer driveways, animal care needs, and fewer nearby services.</p>
+          </div>
+        </aside>
+      </div>
+    </header>
+    <main class="about-shell">
+      <section class="section">
+        <div class="section-heading">
+          <p class="eyebrow">About This Project</p>
+          <h3>Understand what the site is for and how to get the most from it.</h3>
+        </div>
+        <div class="about-stack">
+          <article class="about-card">
+            <h4>Why This Project Exists</h4>
+            <p>Rural emergencies often come with extra challenges: longer travel times for help, fewer nearby services, more dependence on wells, generators, barns, livestock, gravel roads, and local knowledge. During storms, outages, cyber scams, road washouts, or missing-animal situations, families may need quick answers without wasting time searching through many different websites. Rural Safety Guardian was created to pull those practical needs together in one organized place.</p>
+          </article>
+          <article class="about-card">
+            <h4>What This Site Provides</h4>
+            <ul>
+              <li>Weather and hazard guides for storms, outages, winter weather, wildfire concerns, and rural travel risks.</li>
+              <li>Live tools for weather alerts, outage tracking, road-condition awareness, and local contact lookups.</li>
+              <li>Preparedness guidance for emergency kits, go-bags, household planning, and printable reference cards.</li>
+              <li>Cyber safety information covering scams, device setup, password habits, and safer online routines for families.</li>
+              <li>Animal-focused tools and guides for lost pets, livestock planning, and missing-animal tracking stored on the userâ€™s device.</li>
+              <li>Local-only resource pages where users can save their own contacts, notes, and emergency details on the same device.</li>
+            </ul>
+          </article>
+          <article class="about-card">
+            <h4>How to Use This Site</h4>
+            <ol>
+              <li>Start from the dashboard and pick the tool or guide that matches your immediate need.</li>
+              <li>Use live pages like local contacts, weather and outages, or road conditions when you need current information.</li>
+              <li>Use the planning and guide pages ahead of time to build kits, print cards, and organize important contacts.</li>
+              <li>Save your own details in the local-only tools so the information stays available on the device you use most.</li>
+              <li>Print key pages or cards for backup, especially if internet, power, or cell service may become unreliable.</li>
+            </ol>
+          </article>
+        </div>
+      </section>
+        </main>
+    <footer class="site-footer">
+      <div><p class="eyebrow">Rural Safety Guardian</p><p>Use the dashboard, guides, tools, and printable resources to stay organized before and during rural emergencies.</p></div>
+      <div class="footer-links"><a href="index.html">Home</a><a href="local-contacts.html">Contacts</a><a href="weather-outages.html">Weather</a><a href="preparedness-cards.html">Printables</a></div>
+    </footer>
+  </div>
+  <script>
+  (function () {
+    const menu = document.querySelector("#site-menu");
+    const button = document.querySelector("#site-menu-button");
+
+    if (!menu || !button) {
+      return;
+    }
+
+    const groups = [...menu.querySelectorAll(".site-menu-group")];
+    const groupToggles = [...menu.querySelectorAll(".site-menu-group-toggle")];
+
+    function closeGroups() {
+      groups.forEach((group) => {
+        group.classList.remove("is-open");
+        const toggle = group.querySelector(".site-menu-group-toggle");
+        if (toggle) {
+          toggle.setAttribute("aria-expanded", "false");
+        }
+      });
+    }
+
+    function closeMenu() {
+      menu.classList.remove("is-open");
+      button.setAttribute("aria-expanded", "false");
+      closeGroups();
+    }
+
+    button.addEventListener("click", (event) => {
+      event.stopPropagation();
+      const isOpen = menu.classList.toggle("is-open");
+      button.setAttribute("aria-expanded", String(isOpen));
+      if (!isOpen) {
+        closeGroups();
+      }
+    });
+
+    groupToggles.forEach((toggle) => {
+      toggle.addEventListener("click", (event) => {
+        event.stopPropagation();
+        const group = toggle.closest(".site-menu-group");
+        const willOpen = !group.classList.contains("is-open");
+        closeGroups();
+        if (willOpen) {
+          group.classList.add("is-open");
+          toggle.setAttribute("aria-expanded", "true");
+        }
+      });
+    });
+
+    menu.querySelectorAll("a.site-menu-link").forEach((link) => {
+      link.addEventListener("click", () => {
+        closeMenu();
+      });
+    });
+
+    document.addEventListener("click", (event) => {
+      if (!menu.contains(event.target)) {
+        closeMenu();
+      }
+    });
+  })();
+  </script>
+</body>
+</html>

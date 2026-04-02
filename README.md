@@ -1,15 +1,38 @@
-# Rural Safety Guardian
+﻿# Rural Safety Guardian
 
-Rural Safety Guardian is a community focused safety project designed for small towns and rural families. It brings together severe weather alerts, local emergency resources, and simple cybersecurity guidance in one organized place. The goal is to help rural communities stay informed, prepared, and protected.
+Rural Safety Guardian is a lightweight community safety website for small towns and rural families. It combines severe weather preparation, emergency planning, and simple cybersecurity guidance in one clear, easy-to-use place.
 
-## Features
+## What's Included
 
-- Severe weather alerts
-- Local emergency resources
-- Cybersecurity basics for families
-- Community safety reminders
-- Easy to understand guidance
+- A responsive landing page with safety guidance and action-focused sections
+- Weather readiness tips for storms, floods, heat, and winter conditions
+- Emergency planning checklists for families and households
+- Basic cybersecurity advice written in plain language
+- Community reminder cards that can be used as a simple safety dashboard
+
+## Project Structure
+
+- `index.html` - main site markup
+- `styles.css` - visual design and responsive layout
+- `script.js` - lightweight interactive reminders and checklist behavior
+- `preview.ps1` - local preview server launcher
+- `start-preview.cmd` - double-click launcher for the preview
+- `overview.md` - short project summary
+
+## Local Preview
+
+Start a local preview server with:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\preview.ps1
+```
+
+Then open `http://localhost:4173`.
+
+This project is configured to use the Anaconda Python installed at `C:\Users\bestc\anaconda3\python.exe`.
+
+If you prefer, you can also launch `start-preview.cmd` from File Explorer or the terminal.
 
 ## Purpose
 
-This project is inspired by the unique challenges of rural living, where resources are spread out and information is not always easy to find. Rural Safety Guardian brings everything together in one simple, helpful space.
+Rural communities often deal with longer response times, fewer nearby resources, and scattered information. This project is intended to bring practical guidance into one helpful starting point that families can use from a phone or desktop device.

@@ -1,0 +1,645 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Local Contacts and Resources | Rural Safety Guardian</title>
+  <meta name="description" content="Local contacts guidance for rural emergency services, utilities, medical support, veterinary support, and travel resources.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .guide-shell { display: grid; gap: 22px; }
+    .guide-stack { display: grid; gap: 18px; margin-top: 22px; }
+    .search-panel { display: grid; gap: 16px; margin-top: 22px; }
+    .search-card { padding: 22px; border-radius: 6px; background: rgba(250, 247, 242, 0.96); border: 1px solid var(--barnwood-brown); box-shadow: var(--shadow); }
+    .search-form { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px; align-items: end; }
+    .search-form .field { margin-bottom: 0; }
+    .search-note,
+    .search-status,
+    .search-empty,
+    .search-result-body p { margin: 0; line-height: 1.6; }
+    .search-card h3,
+    .search-card h4 { margin: 0; }
+    .search-meta { color: var(--gravel-road-gray); font-size: 0.95rem; }
+    .search-status { min-height: 1.4rem; color: var(--barnwood-red); font-weight: 700; }
+    .search-results { display: grid; gap: 16px; }
+    .search-results-stack { display: grid; gap: 14px; margin-top: 16px; }
+    .search-result-card { background: rgba(250, 247, 242, 0.96); }
+    .search-result-card .print-card-tag { min-width: 7.5rem; }
+    .search-result-body { display: grid; gap: 10px; }
+    .search-result-body ul { margin: 0; padding-left: 18px; line-height: 1.6; }
+    .search-result-body li + li { margin-top: 10px; }
+    .search-result-item { display: grid; gap: 8px; padding: 14px; border-radius: 6px; border: 1px solid rgba(107, 79, 58, 0.18); background: rgba(255, 255, 255, 0.7); }
+    .search-result-item p { margin: 0; }
+    .result-links { display: flex; flex-wrap: wrap; gap: 10px; }
+    .result-links a { color: var(--barnwood-red); font-weight: 700; text-decoration: none; }
+    .result-links a:hover,
+    .result-links a:focus-visible { text-decoration: underline; }
+    @media (max-width: 860px) {
+      .search-form { grid-template-columns: 1fr; }
+      .search-form .button { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <div class="site-menu screen-only" id="site-menu">
+    <button class="button ghost site-menu-button" type="button" id="site-menu-button" aria-expanded="false">Menu &#9662;</button>
+    <div class="site-menu-panel" id="site-menu-panel">
+      <div class="site-menu-group">
+        <button class="site-menu-group-toggle" type="button" aria-expanded="false">Guides</button>
+        <div class="site-menu-group-panel">
+          <a class="site-menu-link" href="weather-readiness.html">Weather Readiness</a>
+          <a class="site-menu-link" href="hazard-safety.html">Hazard Safety</a>
+          <a class="site-menu-link" href="emergency-kits.html">Emergency Kits &amp; Go-Bags</a>
+          <a class="site-menu-link" href="emergency-planning.html">Emergency Planning</a>
+          <a class="site-menu-link" href="cyber-safety.html">Cyber Safety Basics</a>
+        </div>
+      </div>
+      <div class="site-menu-group">
+        <button class="site-menu-group-toggle" type="button" aria-expanded="false">Tools</button>
+        <div class="site-menu-group-panel">
+          <a class="site-menu-link" href="lost-animals.html">Lost Animals Tracker</a>
+          <a class="site-menu-link" href="weather-outages.html">Weather &amp; Outages Dashboard</a>
+          <a class="site-menu-link" href="road-conditions.html">Road Conditions &amp; Travel Safety</a>
+        </div>
+      </div>
+      <div class="site-menu-group">
+        <button class="site-menu-group-toggle" type="button" aria-expanded="false">Local Resources</button>
+        <div class="site-menu-group-panel">
+          <a class="site-menu-link" href="local-contacts.html">Local Contacts &amp; Resources</a>
+          <a class="site-menu-link" href="lost-pets-livestock.html">Lost Pets &amp; Livestock</a>
+          <a class="site-menu-link" href="local-contacts.html#official-emergency-resources">Official Emergency Resources (U.S.)</a>
+        </div>
+      </div>
+      <div class="site-menu-group">
+        <button class="site-menu-group-toggle" type="button" aria-expanded="false">Printables</button>
+        <div class="site-menu-group-panel">
+          <a class="site-menu-link" href="preparedness-cards.html">Printable Preparedness Cards</a>
+        </div>
+      </div>
+      <div class="site-menu-group">
+        <button class="site-menu-group-toggle" type="button" aria-expanded="false">About</button>
+        <div class="site-menu-group-panel">
+          <a class="site-menu-link" href="about.html">About This Project</a>
+        </div>
+      </div>
+      <div class="site-menu-group">
+        <button class="site-menu-group-toggle" type="button" aria-expanded="false">Home</button>
+        <div class="site-menu-group-panel">
+          <a class="site-menu-link" href="index.html">Home (Dashboard)</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="page-shell">
+    <header class="hero">
+      <nav class="topbar"><div class="brand"><span class="brand-mark">RG</span><div><p class="eyebrow">Community Safety Hub</p><h1>Local Contacts and Resources</h1></div></div><div class="nav-actions"><a class="button ghost screen-only" href="index.html">Back to Main Site</a><a class="button ghost screen-only" href="custom-resources.html">Add Your Own Local Contacts</a></div></nav>
+      <div class="hero-grid"><section class="hero-copy"><p class="eyebrow">Dedicated Guide</p><h2>Know which numbers to keep ready before storms, road closures, animal emergencies, or outages make searching harder.</h2><p class="lede">Use this page for what to collect, then use the custom contacts page to save your own local numbers on this device.</p></section><aside class="status-panel"><p class="panel-title">Best Habit</p><div class="status-card"><span class="status-label">Keep two copies</span><strong>Store contacts on paper too</strong><p>Printed numbers still matter when batteries die, signal fails, or several people need the same information at once.</p></div></aside></div>
+    </header>
+    <main class="guide-shell"><section class="section search-panel screen-only" aria-labelledby="local-search-heading"><div class="section-heading"><p class="eyebrow">Search Local Contacts</p><h3 id="local-search-heading">Look up nearby safety contacts by ZIP code, town, or county.</h3></div><div class="search-card"><form class="search-form" id="local-search-form"><label class="field" for="local-search-query"><span>ZIP code, town, or county</span><input id="local-search-query" name="local-search-query" type="text" placeholder="Example: 75901, Angelina County, or Lufkin" autocomplete="postal-code"></label><button class="button" type="button" id="local-search-button">Search</button></form><p class="search-note">Results are pulled from public weather, mapping, travel, FCC, and utility sources when available. Coverage varies by rural area, so keep your own paper list too.</p><p class="search-status" id="local-search-status" aria-live="polite">Enter a ZIP code, town, or county to begin.</p></div><div class="search-results" id="local-search-results"><div class="search-card"><h3>Search Results</h3><p class="search-meta" id="local-search-summary">Each category below has a dedicated body area where matching local contacts can be inserted dynamically.</p><div class="search-results-stack"><article class="print-card search-result-card"><button class="print-card-toggle" type="button" aria-expanded="false"><span><span class="print-card-tag">Results</span><h4>Sheriff / Law Enforcement</h4></span><span class="print-card-icon" aria-hidden="true">+</span></button><div class="print-card-body search-result-body" id="result-law-enforcement" hidden><p class="search-empty">Law-enforcement contacts will appear here.</p></div></article><article class="print-card search-result-card"><button class="print-card-toggle" type="button" aria-expanded="false"><span><span class="print-card-tag">Results</span><h4>Fire &amp; EMS</h4></span><span class="print-card-icon" aria-hidden="true">+</span></button><div class="print-card-body search-result-body" id="result-fire-ems" hidden><p class="search-empty">Fire and EMS contacts will appear here.</p></div></article><article class="print-card search-result-card"><button class="print-card-toggle" type="button" aria-expanded="false"><span><span class="print-card-tag">Results</span><h4>County Emergency Management</h4></span><span class="print-card-icon" aria-hidden="true">+</span></button><div class="print-card-body search-result-body" id="result-emergency-management" hidden><p class="search-empty">Emergency management contacts will appear here.</p></div></article><article class="print-card search-result-card"><button class="print-card-toggle" type="button" aria-expanded="false"><span><span class="print-card-tag">Results</span><h4>Utility Outage Lines</h4></span><span class="print-card-icon" aria-hidden="true">+</span></button><div class="print-card-body search-result-body" id="result-utilities" hidden><p class="search-empty">Utility outage information will appear here.</p></div></article><article class="print-card search-result-card"><button class="print-card-toggle" type="button" aria-expanded="false"><span><span class="print-card-tag">Results</span><h4>Road Conditions &amp; Travel</h4></span><span class="print-card-icon" aria-hidden="true">+</span></button><div class="print-card-body search-result-body" id="result-roads" hidden><p class="search-empty">Road-condition and travel information will appear here.</p></div></article><article class="print-card search-result-card"><button class="print-card-toggle" type="button" aria-expanded="false"><span><span class="print-card-tag">Results</span><h4>Nearest Weather Service Office</h4></span><span class="print-card-icon" aria-hidden="true">+</span></button><div class="print-card-body search-result-body" id="result-weather" hidden><p class="search-empty">Weather office details will appear here.</p></div></article><article class="print-card search-result-card"><button class="print-card-toggle" type="button" aria-expanded="false"><span><span class="print-card-tag">Results</span><h4>Veterinary &amp; Large-Animal Emergency</h4></span><span class="print-card-icon" aria-hidden="true">+</span></button><div class="print-card-body search-result-body" id="result-veterinary" hidden><p class="search-empty">Veterinary and large-animal emergency contacts will appear here.</p></div></article></div></div></div></section><section class="section"><div class="section-heading"><p class="eyebrow">Local Resources and Contacts</p><h3>Gather the numbers that save time when rural help is farther away or communication is limited.</h3></div><div class="guide-stack">
+      <article class="print-card accent-evac is-open"><button class="print-card-toggle" type="button" aria-expanded="true"><span><span class="print-card-tag">Section 1</span><h4>Emergency Services</h4></span><span class="print-card-icon" aria-hidden="true">-</span></button><div class="print-card-body"><ul class="print-list"><li>List sheriff, fire, EMS, and 911 notes specific to your address or access route.</li><li>Write down cross streets, gate instructions, and landmarks rural responders may need.</li><li>Keep non-emergency numbers too, especially where dispatch systems vary by county.</li></ul></div></article>
+      <article class="print-card accent-kit"><button class="print-card-toggle" type="button" aria-expanded="false"><span><span class="print-card-tag">Section 2</span><h4>Utility Outage Lines</h4></span><span class="print-card-icon" aria-hidden="true">+</span></button><div class="print-card-body" hidden><ul class="print-list"><li>Collect power, gas, water, propane, internet, and rural electric co-op numbers.</li><li>Note account numbers and map numbers so outage reporting goes faster.</li><li>Keep instructions for generator use and well-water backup near those contacts.</li></ul></div></article>
+      <article class="print-card accent-medical"><button class="print-card-toggle" type="button" aria-expanded="false"><span><span class="print-card-tag">Section 3</span><h4>Medical and Poison Control Resources</h4></span><span class="print-card-icon" aria-hidden="true">+</span></button><div class="print-card-body" hidden><ul class="print-list"><li>List nearby clinics, hospitals, urgent care, pharmacies, and Poison Control.</li><li>Include after-hours options if the nearest facility is far away.</li><li>Keep directions for the fastest route in bad weather or nighttime travel.</li></ul></div></article>
+      <article class="print-card accent-pet"><button class="print-card-toggle" type="button" aria-expanded="false"><span><span class="print-card-tag">Section 4</span><h4>Veterinary and Large-Animal Emergency Contacts</h4></span><span class="print-card-icon" aria-hidden="true">+</span></button><div class="print-card-body" hidden><ul class="print-list"><li>Keep small-animal and large-animal vets, after-hours clinics, and transport help numbers.</li><li>Write down barn directions, animal IDs, and emergency handling notes.</li><li>Include neighbors or helpers who can load or handle livestock in a hurry.</li></ul></div></article>
+      <article class="print-card accent-storm"><button class="print-card-toggle" type="button" aria-expanded="false"><span><span class="print-card-tag">Section 5</span><h4>County Emergency Management and Weather Resources</h4></span><span class="print-card-icon" aria-hidden="true">+</span></button><div class="print-card-body" hidden><ul class="print-list"><li>List county emergency management, local alert systems, and shelter information.</li><li>Keep your preferred forecast sources and local weather radio details together.</li><li>Note where to find local burn bans, evacuation notices, or shelter updates.</li></ul></div></article>
+      <article class="print-card accent-info"><button class="print-card-toggle" type="button" aria-expanded="false"><span><span class="print-card-tag">Section 6</span><h4>Road Conditions and Travel Information</h4></span><span class="print-card-icon" aria-hidden="true">+</span></button><div class="print-card-body" hidden><ul class="print-list"><li>Keep state, county, and local road condition resources in one place.</li><li>Write down alternate routes if one bridge, culvert, or low-water crossing is a common failure point.</li><li>Include towing, tire, or heavy-equipment contacts that can help on remote roads.</li></ul></div></article>
+      <article class="print-card accent-family" id="official-emergency-resources"><button class="print-card-toggle" type="button" aria-expanded="false"><span><span class="print-card-tag">Section 7</span><h4>Official Emergency Resources (U.S.)</h4></span><span class="print-card-icon" aria-hidden="true">+</span></button><div class="print-card-body" hidden><p class="kit-intro">These official and widely used U.S. emergency resources can help with outages, forecasts, family planning, wildfire activity, road conditions, and livestock preparedness.</p><ul class="print-list"><li><a class="text-link" href="https://poweroutage.us/" target="_blank" rel="noreferrer">PowerOutage.us</a> - real-time outage map</li><li><a class="text-link" href="https://www.fcc.gov/emergency-communications" target="_blank" rel="noreferrer">FCC Emergency Communications Tips</a></li><li><a class="text-link" href="https://www.weather.gov/" target="_blank" rel="noreferrer">NOAA Weather.gov</a> - forecasts, warnings, and radar</li><li><a class="text-link" href="https://www.spc.noaa.gov/" target="_blank" rel="noreferrer">NOAA Storm Prediction Center</a> - severe storm outlooks</li><li><a class="text-link" href="https://www.ready.gov/plan" target="_blank" rel="noreferrer">Ready.gov</a> - family emergency planning</li><li><a class="text-link" href="https://www.fema.gov/about/openfema/data-sets" target="_blank" rel="noreferrer">FEMA Preparedness Guides</a> - printable checklists and planning resources</li><li><a class="text-link" href="https://www.airnow.gov/" target="_blank" rel="noreferrer">AirNow.gov</a> - smoke and air quality</li><li><a class="text-link" href="https://www.nifc.gov/" target="_blank" rel="noreferrer">National Interagency Fire Center</a> - wildfire activity</li><li><a class="text-link" href="https://ops.fhwa.dot.gov/511/511.htm" target="_blank" rel="noreferrer">511 Traveler Information Directory</a> - road conditions by state</li><li><a class="text-link" href="https://www.aphis.usda.gov/animal-emergency-management" target="_blank" rel="noreferrer">USDA Animal Emergency Management</a> - livestock emergencies</li></ul></div></article>
+    </div></section>    </main>
+    <footer class="site-footer">
+      <div><p class="eyebrow">Rural Safety Guardian</p><p>Use the dashboard, guides, tools, and printable resources to stay organized before and during rural emergencies.</p></div>
+      <div class="footer-links"><a href="index.html">Home</a><a href="local-contacts.html">Contacts</a><a href="weather-outages.html">Weather</a><a href="preparedness-cards.html">Printables</a></div>
+    </footer>
+  </div>
+  <script>document.querySelectorAll('.print-card-toggle').forEach((toggle) => { toggle.addEventListener('click', () => { const card = toggle.closest('.print-card'); const body = card.querySelector('.print-card-body'); const icon = toggle.querySelector('.print-card-icon'); const isOpen = toggle.getAttribute('aria-expanded') === 'true'; toggle.setAttribute('aria-expanded', String(!isOpen)); card.classList.toggle('is-open', !isOpen); body.hidden = isOpen; icon.textContent = isOpen ? '+' : '-'; }); });</script>
+<script>
+  (function () {
+    const form = document.querySelector("#local-search-form");
+    const input = document.querySelector("#local-search-query");
+    const button = document.querySelector("#local-search-button");
+    const status = document.querySelector("#local-search-status");
+    const summary = document.querySelector("#local-search-summary");
+
+    if (!form || !input || !button || !status || !summary) {
+      return;
+    }
+
+    const targets = {
+      law: document.querySelector("#result-law-enforcement"),
+      fire: document.querySelector("#result-fire-ems"),
+      emergency: document.querySelector("#result-emergency-management"),
+      utilities: document.querySelector("#result-utilities"),
+      roads: document.querySelector("#result-roads"),
+      weather: document.querySelector("#result-weather"),
+      veterinary: document.querySelector("#result-veterinary")
+    };
+
+    const stateAbbreviations = {
+      Alabama: "AL", Alaska: "AK", Arizona: "AZ", Arkansas: "AR", California: "CA", Colorado: "CO",
+      Connecticut: "CT", Delaware: "DE", Florida: "FL", Georgia: "GA", Hawaii: "HI", Idaho: "ID",
+      Illinois: "IL", Indiana: "IN", Iowa: "IA", Kansas: "KS", Kentucky: "KY", Louisiana: "LA",
+      Maine: "ME", Maryland: "MD", Massachusetts: "MA", Michigan: "MI", Minnesota: "MN", Mississippi: "MS",
+      Missouri: "MO", Montana: "MT", Nebraska: "NE", Nevada: "NV", "New Hampshire": "NH", "New Jersey": "NJ",
+      "New Mexico": "NM", "New York": "NY", "North Carolina": "NC", "North Dakota": "ND", Ohio: "OH",
+      Oklahoma: "OK", Oregon: "OR", Pennsylvania: "PA", "Rhode Island": "RI", "South Carolina": "SC",
+      "South Dakota": "SD", Tennessee: "TN", Texas: "TX", Utah: "UT", Vermont: "VT", Virginia: "VA",
+      Washington: "WA", "West Virginia": "WV", Wisconsin: "WI", Wyoming: "WY", "District of Columbia": "DC"
+    };
+
+    const state511Links = {
+      AL: "https://algotraffic.com/", AK: "https://511.alaska.gov/", AZ: "https://az511.gov/", AR: "https://www.idrivearkansas.com/",
+      CA: "https://quickmap.dot.ca.gov/", CO: "https://www.cotrip.org/", CT: "https://ctroads.org/", DC: "https://chart.maryland.gov/",
+      DE: "https://deldot.gov/Programs/travel_advisory/", FL: "https://fl511.com/", GA: "https://511ga.org/", HI: "https://hidot.hawaii.gov/highways/",
+      IA: "https://511ia.org/", ID: "https://511.idaho.gov/", IL: "https://www.gettingaroundillinois.com/", IN: "https://511in.org/",
+      KS: "https://www.kandrive.gov/", KY: "https://goky.ky.gov/", LA: "https://511la.org/", MA: "https://www.mass511.com/",
+      MD: "https://chart.maryland.gov/", ME: "https://newengland511.org/", MI: "https://mdotjboss.state.mi.us/MiDrive/map", MN: "https://511mn.org/",
+      MO: "https://traveler.modot.org/map/", MS: "https://mdottraffic.com/", MT: "https://www.511mt.net/", NC: "https://drivenc.gov/",
+      ND: "https://travel.dot.nd.gov/", NE: "https://511.nebraska.gov/", NH: "https://newengland511.org/", NJ: "https://www.511nj.org/",
+      NM: "https://nmroads.com/", NV: "https://www.nvroads.com/", NY: "https://www.511ny.org/", OH: "https://www.ohgo.com/",
+      OK: "https://oktraffic.org/", OR: "https://tripcheck.com/", PA: "https://www.511pa.com/", RI: "https://newengland511.org/",
+      SC: "https://www.511sc.org/", SD: "https://sd511.org/", TN: "https://smartway.tn.gov/", TX: "https://drivetexas.org/",
+      UT: "https://udottraffic.utah.gov/", VA: "https://www.511virginia.org/", VT: "https://newengland511.org/", WA: "https://wsdot.com/Travel/Real-time/Map/",
+      WI: "https://511wi.gov/", WV: "https://wv511.org/", WY: "https://wyoroad.info/"
+    };
+
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
+
+    function setStatus(message) {
+      status.textContent = message;
+    }
+
+    function setBusy(isBusy) {
+      button.disabled = isBusy;
+      button.textContent = isBusy ? "Searching..." : "Search";
+    }
+
+    function fetchJson(url, options) {
+      return fetch(url, options).then((response) => {
+        if (!response.ok) {
+          throw new Error("Request failed.");
+        }
+
+        return response.json();
+      });
+    }
+
+    function fetchText(url, options) {
+      return fetch(url, options).then((response) => {
+        if (!response.ok) {
+          throw new Error("Request failed.");
+        }
+
+        return response.text();
+      });
+    }
+
+    function normalizeCounty(value) {
+      return (value || "").replace(/\s+(County|Parish|Borough|Census Area|Municipality)$/i, "").trim();
+    }
+
+    function createSearchLink(label, query) {
+      return {
+        label,
+        href: "https://www.google.com/search?q=" + encodeURIComponent(query)
+      };
+    }
+
+    function renderItems(target, items, emptyMessage) {
+      if (!target) {
+        return;
+      }
+
+      if (!items.length) {
+        target.innerHTML = `<p class="search-empty">${escapeHtml(emptyMessage)}</p>`;
+        return;
+      }
+
+      target.innerHTML = `<ul>${items.map((item) => {
+        const description = item.description ? `<p>${escapeHtml(item.description)}</p>` : "";
+        const details = item.details ? `<p>${escapeHtml(item.details)}</p>` : "";
+        const links = Array.isArray(item.links) && item.links.length
+          ? `<div class="result-links">${item.links.map((link) => `<a href="${escapeHtml(link.href)}" target="_blank" rel="noreferrer">${escapeHtml(link.label)}</a>`).join("")}</div>`
+          : "";
+
+        return `<li><div class="search-result-item"><strong>${escapeHtml(item.title)}</strong>${description}${details}${links}</div></li>`;
+      }).join("")}</ul>`;
+    }
+
+    function formatAddress(tags) {
+      return [
+        tags["addr:housenumber"],
+        tags["addr:street"],
+        tags["addr:city"],
+        tags["addr:state"],
+        tags["addr:postcode"]
+      ].filter(Boolean).join(", ");
+    }
+
+    function officeItemFromTags(tags, fallbackTitle, description) {
+      const links = [];
+      const website = tags.website || tags["contact:website"] || tags.url;
+      const phone = tags.phone || tags["contact:phone"];
+      const address = formatAddress(tags);
+
+      if (website) {
+        links.push({
+          label: "Website",
+          href: /^https?:\/\//i.test(website) ? website : `https://${website}`
+        });
+      }
+
+      if (phone) {
+        links.push({
+          label: "Call",
+          href: `tel:${phone}`
+        });
+      }
+
+      return {
+        title: tags.name || fallbackTitle,
+        description,
+        details: address || "Address not listed in the source data.",
+        links
+      };
+    }
+
+    async function geocodePlace(query) {
+      const matches = await fetchJson(`https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&addressdetails=1&countrycodes=us&q=${encodeURIComponent(query)}`, {
+        headers: { Accept: "application/json" }
+      });
+
+      if (!Array.isArray(matches) || matches.length === 0) {
+        throw new Error("No matching U.S. location was found.");
+      }
+
+      const match = matches[0];
+      const address = match.address || {};
+
+      return {
+        latitude: Number(match.lat),
+        longitude: Number(match.lon),
+        label: match.display_name,
+        town: address.city || address.town || address.village || address.hamlet || "",
+        county: address.county || "",
+        state: address.state || "",
+        postcode: address.postcode || ""
+      };
+    }
+
+    async function lookupFccArea(latitude, longitude) {
+      const data = await fetchJson(`https://geo.fcc.gov/api/census/area?format=json&lat=${latitude}&lon=${longitude}`);
+      const county = Array.isArray(data.results) && data.results[0] ? data.results[0] : null;
+      return county || null;
+    }
+
+    async function lookupWeatherOffice(latitude, longitude) {
+      const pointData = await fetchJson(`https://api.weather.gov/points/${latitude},${longitude}`, {
+        headers: { Accept: "application/geo+json" }
+      });
+      const properties = pointData.properties || {};
+
+      if (!properties.forecastOffice) {
+        return null;
+      }
+
+      const office = await fetchJson(properties.forecastOffice, {
+        headers: { Accept: "application/geo+json" }
+      });
+
+      return {
+        point: properties,
+        office: office.properties || {}
+      };
+    }
+
+    async function lookupPsap(stateCode, countyName) {
+      if (!stateCode || !countyName) {
+        return [];
+      }
+
+      const where = `state='${stateCode}' AND county='${countyName.replace(/'/g, "''")}'`;
+      const url = `https://opendata.fcc.gov/resource/dpq5-ta9j.json?$select=psap_name,county,city,state,type_of_change_full_text,date_last_modified&$where=${encodeURIComponent(where)}&$limit=5`;
+      const records = await fetchJson(url);
+
+      return Array.isArray(records) ? records : [];
+    }
+
+    async function overpassLookup(latitude, longitude) {
+      const query = `
+        [out:json][timeout:20];
+        (
+          nwr(around:60000,${latitude},${longitude})["amenity"="police"];
+          nwr(around:60000,${latitude},${longitude})["amenity"="fire_station"];
+          nwr(around:60000,${latitude},${longitude})["emergency"="ambulance_station"];
+          nwr(around:60000,${latitude},${longitude})["office"="government"]["name"~"Emergency Management|Emergency Services|Emergency Operations|OEM|EMA|Sheriff|Road and Bridge|Public Works|Transportation|County Engineer",i];
+          nwr(around:60000,${latitude},${longitude})["office"="utility"];
+          nwr(around:60000,${latitude},${longitude})["amenity"="veterinary"];
+          nwr(around:60000,${latitude},${longitude})["name"~"Electric|Utility|Utilities|Water|Power|Co-op|Cooperative|Energy",i];
+        );
+        out center tags;
+      `;
+
+      const response = await fetch("https://overpass-api.de/api/interpreter", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8" },
+        body: `data=${encodeURIComponent(query)}`
+      });
+
+      if (!response.ok) {
+        throw new Error("Map data is unavailable.");
+      }
+
+      return response.json();
+    }
+
+    async function lookupPowerOutage(stateName) {
+      if (!stateName) {
+        return {
+          customersOut: null,
+          link: "https://poweroutage.us/us"
+        };
+      }
+
+      try {
+        const html = await fetchText("https://poweroutage.us/us");
+        const compact = html.replace(/\s+/g, " ");
+        const escapedState = stateName.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+        const match = compact.match(new RegExp(`>${escapedState}<[^0-9]{0,120}([0-9,]+)`));
+        const customersOut = match ? match[1] : null;
+
+        return {
+          customersOut,
+          link: "https://poweroutage.us/us"
+        };
+      } catch (error) {
+        return {
+          customersOut: null,
+          link: "https://poweroutage.us/us"
+        };
+      }
+    }
+
+    function buildRoadLinks(stateCode, countyName, stateName) {
+      const links = [];
+      const state511 = state511Links[stateCode];
+
+      if (state511) {
+        links.push({
+          label: `${stateCode} 511 / travel map`,
+          href: state511
+        });
+      } else {
+        links.push({
+          label: "Find your state road conditions",
+          href: "https://ops.fhwa.dot.gov/511/511.htm"
+        });
+      }
+
+      if (countyName && stateName) {
+        links.push(createSearchLink("County road office search", `${countyName} County ${stateName} road department`));
+      }
+
+      return links;
+    }
+
+    function psapItems(records, location) {
+      if (!records.length) {
+        return [{
+          title: "FCC PSAP county search",
+          description: "No direct county PSAP match was returned from the FCC registry.",
+          details: "Use the county dispatch search below for the most current local 911 routing details.",
+          links: [
+            createSearchLink("Search county dispatch", `${location.county || location.town} ${location.state} 911 dispatch`)
+          ]
+        }];
+      }
+
+      return records.map((record) => ({
+        title: record.psap_name || "Public Safety Answering Point",
+        description: "FCC 911 Master PSAP Registry entry.",
+        details: [record.city, record.county, record.state].filter(Boolean).join(", "),
+        links: [
+          createSearchLink("Search dispatch details", `${record.psap_name || ""} ${record.city || ""} ${record.state || ""}`)
+        ]
+      }));
+    }
+
+    function collectOverpassItems(elements, matcher, fallbackTitle, description) {
+      return (elements || [])
+        .filter((entry) => matcher(entry.tags || {}))
+        .slice(0, 4)
+        .map((entry) => officeItemFromTags(entry.tags || {}, fallbackTitle, description));
+    }
+
+    function summarizeLocation(location, fccArea) {
+      const parts = [
+        location.town,
+        location.county || fccArea?.county_name,
+        location.state,
+        location.postcode
+      ].filter(Boolean);
+
+      summary.textContent = parts.join(" • ") || location.label;
+    }
+
+    async function runLookup(query) {
+      setBusy(true);
+      setStatus("Searching public data sources for nearby contacts...");
+
+      try {
+        const location = await geocodePlace(query);
+        const stateCode = stateAbbreviations[location.state] || "";
+        const [fccArea, weather, psapRecords, overpass, outage] = await Promise.allSettled([
+          lookupFccArea(location.latitude, location.longitude),
+          lookupWeatherOffice(location.latitude, location.longitude),
+          lookupPsap(stateCode, normalizeCounty(location.county)),
+          overpassLookup(location.latitude, location.longitude),
+          lookupPowerOutage(location.state)
+        ]);
+
+        summarizeLocation(location, fccArea.status === "fulfilled" ? fccArea.value : null);
+
+        const mapData = overpass.status === "fulfilled" ? (overpass.value.elements || []) : [];
+        const countyName = normalizeCounty(location.county || (fccArea.status === "fulfilled" ? fccArea.value?.county_name : ""));
+
+        const lawItems = [
+          ...psapItems(psapRecords.status === "fulfilled" ? psapRecords.value : [], location),
+          ...collectOverpassItems(mapData, (tags) => tags.amenity === "police" || /sheriff|marshal|police/i.test(tags.name || ""), "Law enforcement office", "Nearby law-enforcement listing from public map data.")
+        ].slice(0, 5);
+
+        const fireItems = collectOverpassItems(mapData, (tags) => tags.amenity === "fire_station" || tags.emergency === "ambulance_station", "Fire / EMS", "Nearby fire or EMS listing from public map data.");
+
+        const emergencyItems = collectOverpassItems(mapData, (tags) => /emergency management|emergency services|emergency operations|oem|ema/i.test(tags.name || ""), "Emergency management", "Nearby county emergency management listing.");
+        if (countyName && location.state) {
+          emergencyItems.unshift({
+            title: `${countyName} County emergency management`,
+            description: "Best-effort county contact lookup.",
+            details: "If no official listing appears below, use the county search link for the latest emergency office page.",
+            links: [createSearchLink("Search county office", `${countyName} County ${location.state} emergency management`)]
+          });
+        }
+
+        const outageInfo = outage.status === "fulfilled" ? outage.value : { customersOut: null, link: "https://poweroutage.us/us" };
+        const utilityItems = [
+          {
+            title: `${location.state || "State"} outage overview`,
+            description: outageInfo.customersOut
+              ? `PowerOutage.us currently lists about ${outageInfo.customersOut} customers out in ${location.state}.`
+              : "Open the statewide outage map for the latest outage totals and utility-level details.",
+            details: "PowerOutage.us data is best used as a quick statewide signal, then confirm with your own utility.",
+            links: [{ label: "Open outage map", href: outageInfo.link }]
+          },
+          ...collectOverpassItems(mapData, (tags) => tags.office === "utility" || /electric|utility|utilities|water|power|co-op|cooperative|energy/i.test(tags.name || ""), "Utility office", "Nearby utility or co-op listing from public map data.")
+        ].slice(0, 5);
+
+        const roadItems = [{
+          title: `${location.state || "State"} road conditions`,
+          description: "State travel map and road-condition resources.",
+          details: countyName ? `${countyName} County and rural roads may have separate closures, weight limits, or bridge advisories.` : "County road offices may carry separate closures or rural bridge notices.",
+          links: buildRoadLinks(stateCode, countyName, location.state)
+        }];
+
+        const roadOffices = collectOverpassItems(mapData, (tags) => /road and bridge|public works|transportation|county engineer|highway/i.test(tags.name || ""), "Road department", "Nearby road or public works office.");
+        roadItems.push(...roadOffices);
+
+        let weatherItems = [];
+        if (weather.status === "fulfilled" && weather.value) {
+          const office = weather.value.office || {};
+          const point = weather.value.point || {};
+          weatherItems = [{
+            title: office.name || point.gridId || "National Weather Service office",
+            description: "Nearest forecast office serving this location.",
+            details: [
+              office.address?.streetAddress,
+              office.address?.addressLocality,
+              office.address?.addressRegion,
+              office.address?.postalCode
+            ].filter(Boolean).join(", ") || "Address not listed.",
+            links: [
+              office["@id"] ? { label: "Office details", href: office["@id"] } : null,
+              point.forecast ? { label: "Forecast", href: point.forecast } : null
+            ].filter(Boolean)
+          }];
+        }
+
+        const vetItems = [
+          ...collectOverpassItems(mapData, (tags) => tags.amenity === "veterinary", "Veterinary clinic", "Nearby veterinary listing from public map data."),
+          {
+            title: "Large-animal emergency search",
+            description: "If a large-animal emergency clinic is not listed nearby, use a county and state search for mobile or equine service.",
+            details: "Large-animal coverage is often sparse in rural areas, so call ahead and keep an after-hours plan.",
+            links: [createSearchLink("Search large-animal vet", `${countyName || location.town} ${location.state} large animal veterinarian`)]
+          }
+        ].slice(0, 5);
+
+        renderItems(targets.law, lawItems, "No sheriff, PSAP, or law-enforcement listings were found for this area.");
+        renderItems(targets.fire, fireItems, "No fire or EMS listings were found for this area.");
+        renderItems(targets.emergency, emergencyItems, "No emergency management listings were found for this area.");
+        renderItems(targets.utilities, utilityItems, "No utility or outage listings were found for this area.");
+        renderItems(targets.roads, roadItems, "No road-condition resources were found for this area.");
+        renderItems(targets.weather, weatherItems, "No nearby weather office details were found for this area.");
+        renderItems(targets.veterinary, vetItems, "No veterinary or large-animal listings were found for this area.");
+
+        setStatus("Local contact search complete.");
+      } catch (error) {
+        Object.values(targets).forEach((target) => {
+          renderItems(target, [], "No contacts were found for this area.");
+        });
+        summary.textContent = "Try a nearby town, ZIP code, or county name.";
+        setStatus(error instanceof Error ? error.message : "Search failed. Please try again.");
+      } finally {
+        setBusy(false);
+      }
+    }
+
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const query = input.value.trim();
+
+      if (!query) {
+        setStatus("Enter a ZIP code, town, or county first.");
+        return;
+      }
+
+      runLookup(query);
+    });
+
+    button.addEventListener("click", () => {
+      form.requestSubmit();
+    });
+  })();
+</script>
+<script>
+  (function () {
+    const menu = document.querySelector("#site-menu");
+    const button = document.querySelector("#site-menu-button");
+
+    if (!menu || !button) {
+      return;
+    }
+
+    const groups = [...menu.querySelectorAll(".site-menu-group")];
+    const groupToggles = [...menu.querySelectorAll(".site-menu-group-toggle")];
+
+    function closeGroups() {
+      groups.forEach((group) => {
+        group.classList.remove("is-open");
+        const toggle = group.querySelector(".site-menu-group-toggle");
+        if (toggle) {
+          toggle.setAttribute("aria-expanded", "false");
+        }
+      });
+    }
+
+    function closeMenu() {
+      menu.classList.remove("is-open");
+      button.setAttribute("aria-expanded", "false");
+      closeGroups();
+    }
+
+    button.addEventListener("click", (event) => {
+      event.stopPropagation();
+      const isOpen = menu.classList.toggle("is-open");
+      button.setAttribute("aria-expanded", String(isOpen));
+      if (!isOpen) {
+        closeGroups();
+      }
+    });
+
+    groupToggles.forEach((toggle) => {
+      toggle.addEventListener("click", (event) => {
+        event.stopPropagation();
+        const group = toggle.closest(".site-menu-group");
+        const willOpen = !group.classList.contains("is-open");
+        closeGroups();
+        if (willOpen) {
+          group.classList.add("is-open");
+          toggle.setAttribute("aria-expanded", "true");
+        }
+      });
+    });
+
+    menu.querySelectorAll("a.site-menu-link").forEach((link) => {
+      link.addEventListener("click", () => {
+        closeMenu();
+      });
+    });
+
+    document.addEventListener("click", (event) => {
+      if (!menu.contains(event.target)) {
+        closeMenu();
+      }
+    });
+  })();
+</script>
+</body>
+</html>
+

@@ -1,0 +1,1399 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weather & Power Outage Dashboard | Rural Safety Guardian</title>
+  <meta
+    name="description"
+    content="Track outage notes, prep for severe weather, and review live weather alerts."
+  >
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Source+Sans+3:wght@400;600;700&display=swap"
+    rel="stylesheet"
+  >
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .site-menu {
+      position: fixed;
+      top: 16px;
+      left: 16px;
+      z-index: 60;
+    }
+
+    .site-menu-button {
+      min-width: 110px;
+    }
+
+    .site-menu-panel {
+      display: none;
+      margin-top: 10px;
+      padding: 10px;
+      border-radius: 18px;
+      background: rgba(248, 244, 234, 0.98);
+      border: 1px solid rgba(34, 75, 67, 0.12);
+      box-shadow: var(--shadow);
+    }
+
+    .site-menu.is-open .site-menu-panel {
+      display: grid;
+      gap: 8px;
+    }
+
+    .site-menu-link {
+      display: block;
+      padding: 0.72rem 0.9rem;
+      border-radius: 14px;
+      color: var(--pine);
+      text-decoration: none;
+      font-weight: 700;
+      background: rgba(34, 75, 67, 0.06);
+    }
+
+    .page-shell {
+      margin-top: 112px;
+    }
+
+    .dashboard-shell {
+      display: grid;
+      gap: 22px;
+    }
+
+    .dashboard-stack {
+      display: grid;
+      gap: 18px;
+      margin-top: 22px;
+    }
+
+    .dashboard-card,
+    .outage-form-card,
+    .outage-list-card {
+      padding: 22px;
+      border-radius: 22px;
+      background: rgba(255, 255, 255, 0.74);
+      border: 1px solid rgba(34, 75, 67, 0.1);
+    }
+
+    .outage-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+      margin-top: 18px;
+    }
+
+    .outage-form {
+      display: grid;
+      gap: 14px;
+    }
+
+    .outage-form input,
+    .outage-form select,
+    .outage-form textarea {
+      width: 100%;
+      padding: 0.9rem 1rem;
+      border: 1px solid rgba(34, 75, 67, 0.18);
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.92);
+      color: var(--ink);
+      font: 600 1rem "Source Sans 3", sans-serif;
+    }
+
+    .outage-form textarea {
+      min-height: 110px;
+      resize: vertical;
+    }
+
+    .dashboard-actions,
+    .outage-actions,
+    .storm-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .outage-toolbar {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .dashboard-note,
+    .dashboard-status,
+    .alerts-status,
+    .outage-empty {
+      margin: 0;
+      color: rgba(24, 33, 38, 0.72);
+    }
+
+    .dashboard-status,
+    .alerts-status {
+      min-height: 1.4rem;
+      font-weight: 700;
+      color: var(--pine);
+    }
+
+    .outage-list,
+    .alerts-list {
+      display: grid;
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .outage-group {
+      min-height: 0;
+    }
+
+    .outage-group-body {
+      display: grid;
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    .outage-entry {
+      min-height: 0;
+      background: rgba(255, 255, 255, 0.86);
+    }
+
+    .outage-entry .print-card-toggle,
+    .outage-group .print-card-toggle {
+      align-items: center;
+    }
+
+    .checklist-columns {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+      margin-top: 10px;
+    }
+
+    .checklist-columns ul,
+    .alerts-list ul {
+      margin: 0;
+      padding-left: 20px;
+      line-height: 1.65;
+    }
+
+    .action-note {
+      margin-top: 14px;
+    }
+
+    .alert-card {
+      min-height: 0;
+    }
+
+    .live-toolbar {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto auto;
+      gap: 12px;
+      align-items: end;
+      margin: 16px 0;
+    }
+
+    .live-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 18px;
+    }
+
+    .live-box {
+      display: grid;
+      gap: 12px;
+      padding: 18px;
+      border-radius: var(--radius);
+      border: 1px solid rgba(107, 79, 58, 0.18);
+      background: rgba(255, 255, 255, 0.78);
+    }
+
+    .live-box h5,
+    .live-box p {
+      margin: 0;
+    }
+
+    .live-box ul {
+      margin: 0;
+      padding-left: 18px;
+      line-height: 1.6;
+    }
+
+    .live-box li + li {
+      margin-top: 8px;
+    }
+
+    .live-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .live-links a {
+      color: var(--barnwood-red);
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .live-links a:hover,
+    .live-links a:focus-visible {
+      text-decoration: underline;
+    }
+
+    .alert-card h4 {
+      margin: 0 0 8px;
+    }
+
+    .alert-meta {
+      display: grid;
+      gap: 8px;
+    }
+
+    .alert-meta p {
+      margin: 0;
+      line-height: 1.55;
+    }
+
+    .cause-storm {
+      box-shadow: inset 0 6px 0 #6f8fb9;
+    }
+
+    .cause-line-down {
+      box-shadow: inset 0 6px 0 #b6654a;
+    }
+
+    .cause-unknown {
+      box-shadow: inset 0 6px 0 #7c6343;
+    }
+
+    @media print {
+      .screen-only,
+      .dashboard-actions .button,
+      .outage-actions .button,
+      .storm-actions .button,
+      .outage-toolbar,
+      #clear-all-outages {
+        display: none !important;
+      }
+
+      .site-menu {
+        display: none !important;
+      }
+
+      .page-shell {
+        margin-top: 0;
+      }
+    }
+
+    @media (max-width: 860px) {
+      .outage-grid,
+      .outage-toolbar,
+      .checklist-columns,
+      .live-grid,
+      .live-toolbar {
+        grid-template-columns: 1fr;
+      }
+
+      .dashboard-actions,
+      .outage-actions,
+      .storm-actions {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="site-menu screen-only" id="site-menu">
+    <button class="button ghost site-menu-button" type="button" id="site-menu-button" aria-expanded="false">Menu &#9662;</button>
+    <div class="site-menu-panel" id="site-menu-panel">
+      <div class="site-menu-group">
+        <button class="site-menu-group-toggle" type="button" aria-expanded="false">Guides</button>
+        <div class="site-menu-group-panel">
+          <a class="site-menu-link" href="weather-readiness.html">Weather Readiness</a>
+          <a class="site-menu-link" href="hazard-safety.html">Hazard Safety</a>
+          <a class="site-menu-link" href="emergency-kits.html">Emergency Kits &amp; Go-Bags</a>
+          <a class="site-menu-link" href="emergency-planning.html">Emergency Planning</a>
+          <a class="site-menu-link" href="cyber-safety.html">Cyber Safety Basics</a>
+        </div>
+      </div>
+      <div class="site-menu-group">
+        <button class="site-menu-group-toggle" type="button" aria-expanded="false">Tools</button>
+        <div class="site-menu-group-panel">
+          <a class="site-menu-link" href="lost-animals.html">Lost Animals Tracker</a>
+          <a class="site-menu-link" href="weather-outages.html">Weather &amp; Outages Dashboard</a>
+          <a class="site-menu-link" href="road-conditions.html">Road Conditions &amp; Travel Safety</a>
+        </div>
+      </div>
+      <div class="site-menu-group">
+        <button class="site-menu-group-toggle" type="button" aria-expanded="false">Local Resources</button>
+        <div class="site-menu-group-panel">
+          <a class="site-menu-link" href="local-contacts.html">Local Contacts &amp; Resources</a>
+          <a class="site-menu-link" href="lost-pets-livestock.html">Lost Pets &amp; Livestock</a>
+          <a class="site-menu-link" href="local-contacts.html#official-emergency-resources">Official Emergency Resources (U.S.)</a>
+        </div>
+      </div>
+      <div class="site-menu-group">
+        <button class="site-menu-group-toggle" type="button" aria-expanded="false">Printables</button>
+        <div class="site-menu-group-panel">
+          <a class="site-menu-link" href="preparedness-cards.html">Printable Preparedness Cards</a>
+        </div>
+      </div>
+      <div class="site-menu-group">
+        <button class="site-menu-group-toggle" type="button" aria-expanded="false">About</button>
+        <div class="site-menu-group-panel">
+          <a class="site-menu-link" href="about.html">About This Project</a>
+        </div>
+      </div>
+      <div class="site-menu-group">
+        <button class="site-menu-group-toggle" type="button" aria-expanded="false">Home</button>
+        <div class="site-menu-group-panel">
+          <a class="site-menu-link" href="index.html">Home (Dashboard)</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="page-shell">
+    <header class="hero">
+      <nav class="topbar">
+        <div class="brand">
+          <span class="brand-mark">RG</span>
+          <div>
+            <p class="eyebrow">Community Safety Hub</p>
+            <h1>Weather &amp; Power Outage Dashboard</h1>
+          </div>
+        </div>
+        <div class="nav-actions">
+          <a class="button ghost screen-only" href="index.html">Back to Main Site</a>
+        </div>
+      </nav>
+
+      <div class="hero-grid">
+        <section class="hero-copy">
+          <p class="eyebrow">Storm Readiness Hub</p>
+          <h2>Track outage details, review prep steps, and check weather alerts in one place.</h2>
+          <p class="lede">
+            Built for rural households that need a fast way to manage storm prep, generator notes, well-water concerns, and long outage timelines.
+          </p>
+        </section>
+
+        <aside class="status-panel">
+          <p class="panel-title">Privacy Note</p>
+          <div class="status-card">
+            <span class="status-label">Stored only on this device</span>
+            <strong>Local-only outage log</strong>
+            <p class="dashboard-note">
+              Outage entries and prep notes stay in this browser on this device. Live weather alerts are fetched only when you open that section.
+            </p>
+          </div>
+        </aside>
+      </div>
+    </header>
+
+    <main class="dashboard-shell">
+      <section class="section">
+        <div class="section-heading">
+          <p class="eyebrow">Severe Weather &amp; Power Outage Dashboard</p>
+          <h3>Use the sections below to prep early, log outages, and react quickly when conditions shift.</h3>
+        </div>
+
+        <div class="dashboard-stack">
+          <article class="print-card cause-storm is-open">
+            <button class="print-card-toggle" type="button" aria-expanded="true">
+              <span>
+                <span class="print-card-tag">Section 1</span>
+                <h4>Severe Weather Prep Checklist</h4>
+              </span>
+              <span class="print-card-icon" aria-hidden="true">-</span>
+            </button>
+            <div class="print-card-body">
+              <p class="kit-intro">
+                Work through these basics before storms arrive so power, water, livestock, and shelter needs are already covered.
+              </p>
+              <div class="checklist-columns">
+                <ul class="print-list">
+                  <li>Top off generator fuel and review safe outdoor generator placement.</li>
+                  <li>Make sure the well pump backup plan is ready if power goes out.</li>
+                  <li>Store extra drinking water and fill tubs or containers for household use.</li>
+                  <li>Move livestock toward the safest available shelter or windbreak.</li>
+                  <li>Review who will use the tornado shelter and how to get there fast.</li>
+                </ul>
+                <ul class="print-list">
+                  <li>Keep flashlights, batteries, radios, and chargers together in one place.</li>
+                  <li>Protect refrigerator and freezer contents by limiting door opening.</li>
+                  <li>Secure gates, loose tools, feed containers, and lightweight outdoor items.</li>
+                  <li>Check medications, refrigerated supplies, and backup cooling plans.</li>
+                  <li>Write down key utility, vet, and county emergency numbers before service is interrupted.</li>
+                </ul>
+              </div>
+            </div>
+          </article>
+
+          <article class="print-card cause-line-down">
+            <button class="print-card-toggle" type="button" aria-expanded="false">
+              <span>
+                <span class="print-card-tag">Section 2</span>
+                <h4>Power Outage Log</h4>
+              </span>
+              <span class="print-card-icon" aria-hidden="true">+</span>
+            </button>
+            <div class="print-card-body" hidden>
+              <p class="kit-intro">
+                Log outage details, generator status, and updates so your household can track what happened and what still needs attention.
+              </p>
+
+              <div class="outage-grid">
+                <div class="outage-form-card">
+                  <form class="outage-form" id="outage-form">
+                    <input type="hidden" id="outage-id">
+
+                    <label class="field">
+                      <span>Outage start time</span>
+                      <input id="outage-start" type="datetime-local" required>
+                    </label>
+
+                    <label class="field">
+                      <span>Suspected cause</span>
+                      <select id="outage-cause" required>
+                        <option value="Storm">Storm</option>
+                        <option value="Line Down">Line Down</option>
+                        <option value="Unknown">Unknown</option>
+                      </select>
+                    </label>
+
+                    <label class="field">
+                      <span>Generator status</span>
+                      <select id="generator-status" required>
+                        <option value="Not Started">Not Started</option>
+                        <option value="Ready">Ready</option>
+                        <option value="Running">Running</option>
+                        <option value="Needs Fuel">Needs Fuel</option>
+                        <option value="Unavailable">Unavailable</option>
+                      </select>
+                    </label>
+
+                    <label class="field">
+                      <span>Notes</span>
+                      <textarea id="outage-notes" placeholder="Downed trees, well-water status, livestock checks, freezer concerns, utility contact notes"></textarea>
+                    </label>
+
+                    <div class="outage-actions">
+                      <button class="button" type="submit" id="save-outage">Save Outage Entry</button>
+                      <button class="button ghost" type="button" id="clear-outage-form">Clear Form</button>
+                    </div>
+
+                    <p class="dashboard-status" id="outage-status" aria-live="polite"></p>
+                  </form>
+                </div>
+
+                <div class="outage-list-card">
+                  <p class="panel-title">Saved Outage Entries</p>
+                  <p class="dashboard-note">
+                    Outage log data is stored only on this device. Keep paper backups for critical information if a long outage is likely.
+                  </p>
+
+                  <div class="outage-toolbar screen-only">
+                    <label class="field">
+                      <span>Sort by</span>
+                      <select id="sort-outages">
+                        <option value="recent">Most recent</option>
+                        <option value="cause">By cause</option>
+                      </select>
+                    </label>
+
+                    <label class="field">
+                      <span>Group entries</span>
+                      <select id="group-outages">
+                        <option value="yes">Group by cause</option>
+                        <option value="no">Do not group</option>
+                      </select>
+                    </label>
+
+                    <div class="dashboard-actions">
+                      <button class="button ghost" type="button" id="clear-all-outages">Clear All</button>
+                    </div>
+                  </div>
+
+                  <div class="outage-list" id="outage-list">
+                    <p class="outage-empty" id="outage-empty">No outage entries yet. Start your first outage log when the power first drops or when you begin storm prep.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <article class="print-card cause-unknown">
+            <button class="print-card-toggle" type="button" aria-expanded="false">
+              <span>
+                <span class="print-card-tag">Section 3</span>
+                <h4>Storm Mode Quick Actions</h4>
+              </span>
+              <span class="print-card-icon" aria-hidden="true">+</span>
+            </button>
+            <div class="print-card-body" hidden>
+              <p class="kit-intro">
+                Use these quick actions to jump into common storm tasks without hunting through the page.
+              </p>
+              <div class="storm-actions screen-only">
+                <button class="button" type="button" id="action-start-log">Start Outage Log</button>
+                <button class="button ghost" type="button" id="action-generator">Prep Generator</button>
+                <button class="button ghost" type="button" id="action-shelter">Check Tornado Shelter</button>
+                <button class="button ghost" type="button" id="action-livestock">Secure Livestock</button>
+                <button class="button ghost" type="button" id="action-print-contacts">Print Emergency Contacts</button>
+              </div>
+              <p class="dashboard-note action-note" id="quick-action-note">
+                Quick actions can jump you to the outage log, suggest next steps, or open the browser print dialog for your local contact resources.
+              </p>
+            </div>
+          </article>
+
+          <article class="print-card cause-storm" id="alerts-card">
+            <button class="print-card-toggle" type="button" aria-expanded="false" id="alerts-toggle">
+              <span>
+                <h4>Live Weather Alerts</h4>
+              </span>
+              <span class="print-card-icon" aria-hidden="true">+</span>
+            </button>
+            <div class="print-card-body" hidden id="alerts-body">
+              <p class="kit-intro">
+                This section loads active National Weather Service alerts only when opened.
+              </p>
+              <div class="live-toolbar screen-only">
+                <label class="field">
+                  <span>Location</span>
+                  <input id="dashboard-location-query" type="text" placeholder="ZIP code, town, or county">
+                </label>
+                <button class="button" type="button" id="load-live-data">Load Live Data</button>
+                <button class="button ghost" type="button" id="use-my-location">Use My Location</button>
+              </div>
+              <p class="alerts-status" id="alerts-status" aria-live="polite"></p>
+              <p class="dashboard-note" id="alerts-summary">Open this section and enter a location to check nearby weather, outage, and travel conditions.</p>
+              <div class="live-grid">
+                <article class="live-box">
+                  <h5>Active Weather Alerts</h5>
+                  <div class="alerts-list" id="alerts-list">
+                    <p class="dashboard-note">Nearby warnings and advisories will appear here.</p>
+                  </div>
+                </article>
+                <article class="live-box">
+                  <h5>Forecast Zone Information</h5>
+                  <div id="forecast-zone-box">
+                    <p class="dashboard-note">Forecast zone, county, and forecast office details will appear here.</p>
+                  </div>
+                </article>
+                <article class="live-box">
+                  <h5>State Power Outage Snapshot</h5>
+                  <div id="power-outage-box">
+                    <p class="dashboard-note">Statewide outage totals and outage map links will appear here.</p>
+                  </div>
+                </article>
+                <article class="live-box">
+                  <h5>State 511 / Road Conditions</h5>
+                  <div id="road-conditions-box">
+                    <p class="dashboard-note">State road conditions and travel resources will appear here.</p>
+                  </div>
+                </article>
+                <article class="live-box">
+                  <h5>Air Quality</h5>
+                  <div id="air-quality-box">
+                    <p class="dashboard-note">Air quality guidance will appear here when available.</p>
+                  </div>
+                </article>
+              </div>
+              <div class="alerts-list screen-only" id="alerts-list-fallback" hidden>
+                <p class="dashboard-note">Open this section to check active warnings like tornado, severe thunderstorm, high wind, or ice storm alerts.</p>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+        </main>
+    <footer class="site-footer">
+      <div><p class="eyebrow">Rural Safety Guardian</p><p>Use the dashboard, guides, tools, and printable resources to stay organized before and during rural emergencies.</p></div>
+      <div class="footer-links"><a href="index.html">Home</a><a href="local-contacts.html">Contacts</a><a href="weather-outages.html">Weather</a><a href="preparedness-cards.html">Printables</a></div>
+    </footer>
+  </div>
+
+  <script>
+    const outageStorageKey = "ruralGuardianOutageLog";
+
+    const sectionToggles = [...document.querySelectorAll(".print-card-toggle")];
+    const outageForm = document.querySelector("#outage-form");
+    const outageIdInput = document.querySelector("#outage-id");
+    const outageStartInput = document.querySelector("#outage-start");
+    const outageCauseInput = document.querySelector("#outage-cause");
+    const generatorStatusInput = document.querySelector("#generator-status");
+    const outageNotesInput = document.querySelector("#outage-notes");
+    const saveOutageButton = document.querySelector("#save-outage");
+    const clearOutageFormButton = document.querySelector("#clear-outage-form");
+    const clearAllOutagesButton = document.querySelector("#clear-all-outages");
+    const outageStatus = document.querySelector("#outage-status");
+    const outageList = document.querySelector("#outage-list");
+    const outageEmpty = document.querySelector("#outage-empty");
+    const sortOutagesSelect = document.querySelector("#sort-outages");
+    const groupOutagesSelect = document.querySelector("#group-outages");
+    const quickActionNote = document.querySelector("#quick-action-note");
+    const alertsToggle = document.querySelector("#alerts-toggle");
+    const alertsBody = document.querySelector("#alerts-body");
+    const alertsStatus = document.querySelector("#alerts-status");
+    const alertsList = document.querySelector("#alerts-list");
+    const alertsSummary = document.querySelector("#alerts-summary");
+    const dashboardLocationQuery = document.querySelector("#dashboard-location-query");
+    const loadLiveDataButton = document.querySelector("#load-live-data");
+    const useMyLocationButton = document.querySelector("#use-my-location");
+    const forecastZoneBox = document.querySelector("#forecast-zone-box");
+    const powerOutageBox = document.querySelector("#power-outage-box");
+    const roadConditionsBox = document.querySelector("#road-conditions-box");
+    const airQualityBox = document.querySelector("#air-quality-box");
+
+    let alertsLoaded = false;
+        const preferredWeatherLocationKey = "ruralGuardianWeatherLocation";
+    const stateAbbreviations = {
+      Alabama: "AL", Alaska: "AK", Arizona: "AZ", Arkansas: "AR", California: "CA", Colorado: "CO",
+      Connecticut: "CT", Delaware: "DE", Florida: "FL", Georgia: "GA", Hawaii: "HI", Idaho: "ID",
+      Illinois: "IL", Indiana: "IN", Iowa: "IA", Kansas: "KS", Kentucky: "KY", Louisiana: "LA",
+      Maine: "ME", Maryland: "MD", Massachusetts: "MA", Michigan: "MI", Minnesota: "MN", Mississippi: "MS",
+      Missouri: "MO", Montana: "MT", Nebraska: "NE", Nevada: "NV", "New Hampshire": "NH", "New Jersey": "NJ",
+      "New Mexico": "NM", "New York": "NY", "North Carolina": "NC", "North Dakota": "ND", Ohio: "OH",
+      Oklahoma: "OK", Oregon: "OR", Pennsylvania: "PA", "Rhode Island": "RI", "South Carolina": "SC",
+      "South Dakota": "SD", Tennessee: "TN", Texas: "TX", Utah: "UT", Vermont: "VT", Virginia: "VA",
+      Washington: "WA", "West Virginia": "WV", Wisconsin: "WI", Wyoming: "WY", "District of Columbia": "DC"
+    };
+    const state511Links = {
+      AL: "https://algotraffic.com/", AK: "https://511.alaska.gov/", AZ: "https://az511.gov/", AR: "https://www.idrivearkansas.com/",
+      CA: "https://quickmap.dot.ca.gov/", CO: "https://www.cotrip.org/", CT: "https://ctroads.org/", DC: "https://chart.maryland.gov/",
+      DE: "https://deldot.gov/Programs/travel_advisory/", FL: "https://fl511.com/", GA: "https://511ga.org/", HI: "https://hidot.hawaii.gov/highways/",
+      IA: "https://511ia.org/", ID: "https://511.idaho.gov/", IL: "https://www.gettingaroundillinois.com/", IN: "https://511in.org/",
+      KS: "https://www.kandrive.gov/", KY: "https://goky.ky.gov/", LA: "https://511la.org/", MA: "https://www.mass511.com/",
+      MD: "https://chart.maryland.gov/", ME: "https://newengland511.org/", MI: "https://mdotjboss.state.mi.us/MiDrive/map", MN: "https://511mn.org/",
+      MO: "https://traveler.modot.org/map/", MS: "https://mdottraffic.com/", MT: "https://www.511mt.net/", NC: "https://drivenc.gov/",
+      ND: "https://travel.dot.nd.gov/", NE: "https://511.nebraska.gov/", NH: "https://newengland511.org/", NJ: "https://www.511nj.org/",
+      NM: "https://nmroads.com/", NV: "https://www.nvroads.com/", NY: "https://www.511ny.org/", OH: "https://www.ohgo.com/",
+      OK: "https://oktraffic.org/", OR: "https://tripcheck.com/", PA: "https://www.511pa.com/", RI: "https://newengland511.org/",
+      SC: "https://www.511sc.org/", SD: "https://sd511.org/", TN: "https://smartway.tn.gov/", TX: "https://drivetexas.org/",
+      UT: "https://udottraffic.utah.gov/", VA: "https://www.511virginia.org/", VT: "https://newengland511.org/", WA: "https://wsdot.com/Travel/Real-time/Map/",
+      WI: "https://511wi.gov/", WV: "https://wv511.org/", WY: "https://wyoroad.info/"
+    };
+
+    function toggleCard(toggle, forceOpen) {
+      const card = toggle.closest(".print-card");
+      const body = card?.querySelector(".print-card-body");
+      const icon = toggle.querySelector(".print-card-icon");
+
+      if (!card || !body || !icon) {
+        return;
+      }
+
+      const current = toggle.getAttribute("aria-expanded") === "true";
+      const next = typeof forceOpen === "boolean" ? forceOpen : !current;
+      toggle.setAttribute("aria-expanded", String(next));
+      card.classList.toggle("is-open", next);
+      body.hidden = !next;
+      icon.textContent = next ? "-" : "+";
+    }
+
+    sectionToggles.forEach((toggle) => {
+      toggle.addEventListener("click", () => {
+        toggleCard(toggle);
+      });
+    });
+
+    function loadOutages() {
+      const stored = localStorage.getItem(outageStorageKey);
+
+      if (!stored) {
+        return [];
+      }
+
+      try {
+        const parsed = JSON.parse(stored);
+        return Array.isArray(parsed) ? parsed : [];
+      } catch (error) {
+        return [];
+      }
+    }
+
+    function saveOutages(entries) {
+      localStorage.setItem(outageStorageKey, JSON.stringify(entries));
+    }
+
+    function setOutageStatus(message) {
+      outageStatus.textContent = message;
+    }
+
+    function resetOutageForm() {
+      outageForm.reset();
+      outageIdInput.value = "";
+      outageCauseInput.value = "Storm";
+      generatorStatusInput.value = "Not Started";
+      saveOutageButton.textContent = "Save Outage Entry";
+      setOutageStatus("");
+    }
+
+    function getCauseClass(cause) {
+      if (cause === "Storm") {
+        return "cause-storm";
+      }
+
+      if (cause === "Line Down") {
+        return "cause-line-down";
+      }
+
+      return "cause-unknown";
+    }
+
+    function startOutageEdit(entryId) {
+      const entries = loadOutages();
+      const entry = entries.find((item) => item.id === entryId);
+
+      if (!entry) {
+        return;
+      }
+
+      outageIdInput.value = entry.id;
+      outageStartInput.value = entry.startTime;
+      outageCauseInput.value = entry.cause;
+      generatorStatusInput.value = entry.generatorStatus;
+      outageNotesInput.value = entry.notes;
+      saveOutageButton.textContent = "Update Outage Entry";
+      setOutageStatus("Editing outage entry.");
+      outageStartInput.focus();
+    }
+
+    function deleteOutage(entryId) {
+      const entries = loadOutages().filter((item) => item.id !== entryId);
+      saveOutages(entries);
+      renderOutages();
+
+      if (outageIdInput.value === entryId) {
+        resetOutageForm();
+      }
+
+      setOutageStatus("Outage entry deleted from this device.");
+    }
+
+    function createOutageEntry(entry, isOpen) {
+      const article = document.createElement("article");
+      article.className = `print-card outage-entry ${getCauseClass(entry.cause)}`;
+
+      if (isOpen) {
+        article.classList.add("is-open");
+      }
+
+      const toggle = document.createElement("button");
+      toggle.className = "print-card-toggle";
+      toggle.type = "button";
+      toggle.setAttribute("aria-expanded", String(isOpen));
+
+      const header = document.createElement("span");
+
+      const tag = document.createElement("span");
+      tag.className = "print-card-tag";
+      tag.textContent = entry.cause;
+
+      const title = document.createElement("h4");
+      title.textContent = new Date(entry.createdAt).toLocaleString();
+
+      header.append(tag, title);
+
+      const icon = document.createElement("span");
+      icon.className = "print-card-icon";
+      icon.setAttribute("aria-hidden", "true");
+      icon.textContent = isOpen ? "-" : "+";
+
+      toggle.append(header, icon);
+
+      const body = document.createElement("div");
+      body.className = "print-card-body";
+      body.hidden = !isOpen;
+
+      const details = document.createElement("div");
+      details.className = "alert-meta";
+
+      const start = document.createElement("p");
+      start.innerHTML = `<strong>Outage start:</strong> ${entry.startTime}`;
+
+      const cause = document.createElement("p");
+      cause.innerHTML = `<strong>Suspected cause:</strong> ${entry.cause}`;
+
+      const generator = document.createElement("p");
+      generator.innerHTML = `<strong>Generator status:</strong> ${entry.generatorStatus}`;
+
+      const notes = document.createElement("p");
+      notes.innerHTML = `<strong>Notes:</strong> ${entry.notes || "No extra notes added."}`;
+
+      details.append(start, cause, generator, notes);
+
+      const actions = document.createElement("div");
+      actions.className = "outage-actions";
+
+      const editButton = document.createElement("button");
+      editButton.className = "button ghost";
+      editButton.type = "button";
+      editButton.textContent = "Edit";
+      editButton.addEventListener("click", () => {
+        startOutageEdit(entry.id);
+      });
+
+      const deleteButton = document.createElement("button");
+      deleteButton.className = "button";
+      deleteButton.type = "button";
+      deleteButton.textContent = "Delete";
+      deleteButton.addEventListener("click", () => {
+        deleteOutage(entry.id);
+      });
+
+      actions.append(editButton, deleteButton);
+      body.append(details, actions);
+
+      toggle.addEventListener("click", () => {
+        toggleCard(toggle);
+      });
+
+      article.append(toggle, body);
+      return article;
+    }
+
+    function createOutageGroup(cause, entries, isOpen) {
+      const article = document.createElement("article");
+      article.className = `print-card outage-group ${getCauseClass(cause)}`;
+
+      if (isOpen) {
+        article.classList.add("is-open");
+      }
+
+      const toggle = document.createElement("button");
+      toggle.className = "print-card-toggle";
+      toggle.type = "button";
+      toggle.setAttribute("aria-expanded", String(isOpen));
+
+      const header = document.createElement("span");
+
+      const tag = document.createElement("span");
+      tag.className = "print-card-tag";
+      tag.textContent = `${cause} (${entries.length})`;
+
+      const title = document.createElement("h4");
+      title.textContent = `${cause} Outages`;
+
+      header.append(tag, title);
+
+      const icon = document.createElement("span");
+      icon.className = "print-card-icon";
+      icon.setAttribute("aria-hidden", "true");
+      icon.textContent = isOpen ? "-" : "+";
+
+      toggle.append(header, icon);
+
+      const body = document.createElement("div");
+      body.className = "print-card-body outage-group-body";
+      body.hidden = !isOpen;
+
+      entries.forEach((entry, index) => {
+        body.append(createOutageEntry(entry, index === 0));
+      });
+
+      toggle.addEventListener("click", () => {
+        toggleCard(toggle);
+      });
+
+      article.append(toggle, body);
+      return article;
+    }
+
+    function getVisibleOutages() {
+      const entries = loadOutages();
+      const sorted = [...entries];
+
+      if (sortOutagesSelect.value === "cause") {
+        sorted.sort((a, b) => a.cause.localeCompare(b.cause) || (b.createdAt - a.createdAt));
+      } else {
+        sorted.sort((a, b) => b.createdAt - a.createdAt);
+      }
+
+      return sorted;
+    }
+
+    function renderOutages() {
+      const entries = getVisibleOutages();
+      outageList.innerHTML = "";
+
+      if (entries.length === 0) {
+        outageList.append(outageEmpty);
+        return;
+      }
+
+      if (groupOutagesSelect.value === "no") {
+        entries.forEach((entry, index) => {
+          outageList.append(createOutageEntry(entry, index === 0));
+        });
+        return;
+      }
+
+      const grouped = new Map();
+
+      entries.forEach((entry) => {
+        if (!grouped.has(entry.cause)) {
+          grouped.set(entry.cause, []);
+        }
+
+        grouped.get(entry.cause).push(entry);
+      });
+
+      [...grouped.entries()].forEach(([cause, items], index) => {
+        outageList.append(createOutageGroup(cause, items, index === 0));
+      });
+    }
+
+    outageForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      const entries = loadOutages();
+      const existingId = outageIdInput.value;
+      const entry = {
+        id: existingId || String(Date.now()),
+        startTime: outageStartInput.value,
+        cause: outageCauseInput.value,
+        generatorStatus: generatorStatusInput.value,
+        notes: outageNotesInput.value.trim(),
+        createdAt: existingId
+          ? (entries.find((item) => item.id === existingId)?.createdAt || Date.now())
+          : Date.now()
+      };
+
+      const nextEntries = existingId
+        ? entries.map((item) => (item.id === existingId ? entry : item))
+        : [...entries, entry];
+
+      saveOutages(nextEntries);
+      renderOutages();
+      resetOutageForm();
+      setOutageStatus(existingId ? "Outage entry updated on this device." : "Outage entry saved on this device.");
+    });
+
+    clearOutageFormButton.addEventListener("click", () => {
+      resetOutageForm();
+      setOutageStatus("Outage form cleared.");
+    });
+
+    clearAllOutagesButton.addEventListener("click", () => {
+      const confirmed = window.confirm("Clear all saved outage entries from this device?");
+
+      if (!confirmed) {
+        return;
+      }
+
+      localStorage.removeItem(outageStorageKey);
+      renderOutages();
+      resetOutageForm();
+      setOutageStatus("All outage entries were removed from this device.");
+    });
+
+    sortOutagesSelect.addEventListener("change", () => {
+      renderOutages();
+    });
+
+    groupOutagesSelect.addEventListener("change", () => {
+      renderOutages();
+    });
+
+    document.querySelector("#action-start-log").addEventListener("click", () => {
+      toggleCard(document.querySelector("#outage-form").closest(".print-card").querySelector(".print-card-toggle"), true);
+      outageStartInput.focus();
+      quickActionNote.textContent = "Outage log opened. Start by entering the outage start time and what you think caused it.";
+    });
+
+    document.querySelector("#action-generator").addEventListener("click", () => {
+      quickActionNote.textContent = "Prep Generator: check fuel, oil, cords, and safe outdoor placement before starting it.";
+    });
+
+    document.querySelector("#action-shelter").addEventListener("click", () => {
+      quickActionNote.textContent = "Check Tornado Shelter: confirm access, lights, shoes, water, and everyone who should move there quickly.";
+    });
+
+    document.querySelector("#action-livestock").addEventListener("click", () => {
+      quickActionNote.textContent = "Secure Livestock: check fence lines, move animals toward shelter, and keep water and feed access clear.";
+    });
+
+    document.querySelector("#action-print-contacts").addEventListener("click", () => {
+      window.print();
+      quickActionNote.textContent = "Print dialog opened. Consider printing your Local Resources section or saving this page as a quick storm reference.";
+    });
+
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
+
+    function fetchJson(url, options) {
+      return fetch(url, options).then((response) => {
+        if (!response.ok) {
+          throw new Error("Request failed.");
+        }
+
+        return response.json();
+      });
+    }
+
+    function fetchText(url, options) {
+      return fetch(url, options).then((response) => {
+        if (!response.ok) {
+          throw new Error("Request failed.");
+        }
+
+        return response.text();
+      });
+    }
+
+    function renderInfoBox(target, items, emptyMessage) {
+      if (!target) {
+        return;
+      }
+
+      if (!items.length) {
+        target.innerHTML = `<p class="dashboard-note">${emptyMessage}</p>`;
+        return;
+      }
+
+      target.innerHTML = `<ul>${items.map((item) => {
+        const links = item.links && item.links.length
+          ? `<div class="live-links">${item.links.map((link) => `<a href="${escapeHtml(link.href)}" target="_blank" rel="noreferrer">${escapeHtml(link.label)}</a>`).join("")}</div>`
+          : "";
+
+        return `<li><strong>${escapeHtml(item.title)}</strong><p>${escapeHtml(item.description)}</p>${links}</li>`;
+      }).join("")}</ul>`;
+    }
+
+    async function geocodePlace(query) {
+      const results = await fetchJson(`https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&addressdetails=1&countrycodes=us&q=${encodeURIComponent(query)}`, {
+        headers: { Accept: "application/json" }
+      });
+
+      if (!Array.isArray(results) || !results.length) {
+        throw new Error("No location match was found.");
+      }
+
+      const match = results[0];
+      const address = match.address || {};
+
+      return {
+        latitude: Number(match.lat),
+        longitude: Number(match.lon),
+        label: match.display_name,
+        town: address.city || address.town || address.village || address.hamlet || "",
+        county: address.county || "",
+        state: address.state || "",
+        postcode: address.postcode || ""
+      };
+    }
+
+    async function reverseGeocodePlace(latitude, longitude) {
+      const match = await fetchJson(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&addressdetails=1&zoom=10&lat=${latitude}&lon=${longitude}`, {
+        headers: { Accept: "application/json" }
+      });
+      const address = match.address || {};
+
+      return {
+        latitude,
+        longitude,
+        label: match.display_name || "Current location",
+        town: address.city || address.town || address.village || address.hamlet || "",
+        county: address.county || "",
+        state: address.state || "",
+        postcode: address.postcode || ""
+      };
+    }
+
+    async function loadWeatherPointData(latitude, longitude) {
+      const pointData = await fetchJson(`https://api.weather.gov/points/${latitude},${longitude}`, {
+        headers: { Accept: "application/geo+json" }
+      });
+
+      const properties = pointData.properties || {};
+      const officeData = properties.forecastOffice
+        ? await fetchJson(properties.forecastOffice, { headers: { Accept: "application/geo+json" } })
+        : null;
+
+      return {
+        point: properties,
+        office: officeData ? officeData.properties || {} : {}
+      };
+    }
+
+    async function loadAlertsForPoint(latitude, longitude) {
+      const data = await fetchJson(`https://api.weather.gov/alerts/active?point=${latitude},${longitude}`, {
+        headers: { Accept: "application/geo+json" }
+      });
+
+      const allowedEvents = new Set([
+        "Tornado Warning",
+        "Severe Thunderstorm Warning",
+        "High Wind Warning",
+        "Ice Storm Warning",
+        "Flash Flood Warning",
+        "Winter Storm Warning"
+      ]);
+
+      return (data.features || []).filter((feature) => {
+        const event = feature.properties?.event || "";
+        return allowedEvents.has(event);
+      });
+    }
+
+    async function loadPowerOutageSummary(stateName) {
+      if (!stateName) {
+        return {
+          customersOut: null,
+          link: "https://poweroutage.us/us"
+        };
+      }
+
+      try {
+        const html = await fetchText("https://poweroutage.us/us");
+        const compact = html.replace(/\s+/g, " ");
+        const escapedState = stateName.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+        const match = compact.match(new RegExp(`>${escapedState}<[^0-9]{0,120}([0-9,]+)`));
+
+        return {
+          customersOut: match ? match[1] : null,
+          link: "https://poweroutage.us/us"
+        };
+      } catch (error) {
+        return {
+          customersOut: null,
+          link: "https://poweroutage.us/us"
+        };
+      }
+    }
+
+    function renderAlerts(alerts) {
+      alertsList.innerHTML = "";
+
+      if (!alerts.length) {
+        alertsList.innerHTML = "<p class=\"dashboard-note\">No high-priority NWS alerts were returned for this location right now.</p>";
+        return;
+      }
+
+      alerts.forEach((feature) => {
+        const properties = feature.properties || {};
+        const article = document.createElement("article");
+        article.className = "print-card alert-card cause-storm is-open";
+
+        const body = document.createElement("div");
+        body.className = "print-card-body";
+
+        body.innerHTML = `
+          <h4>${escapeHtml(properties.event || "Weather Alert")}</h4>
+          <div class="alert-meta">
+            <p><strong>Area:</strong> ${escapeHtml(properties.areaDesc || "Not listed")}</p>
+            <p><strong>Headline:</strong> ${escapeHtml(properties.headline || "Not listed")}</p>
+            <p><strong>Instructions:</strong> ${escapeHtml(properties.instruction || "Follow local officials and trusted forecasts for the latest guidance.")}</p>
+          </div>
+        `;
+
+        article.append(body);
+        alertsList.append(article);
+      });
+    }
+
+    async function populateLiveData(location) {
+      const stateCode = stateAbbreviations[location.state] || "";
+      alertsStatus.textContent = "Loading live weather, outage, and road data...";
+      alertsSummary.textContent = [location.town, location.county, location.state, location.postcode].filter(Boolean).join(" • ") || location.label;
+
+      try {
+        const [pointData, alerts, outage] = await Promise.allSettled([
+          loadWeatherPointData(location.latitude, location.longitude),
+          loadAlertsForPoint(location.latitude, location.longitude),
+          loadPowerOutageSummary(location.state)
+        ]);
+
+        if (alerts.status === "fulfilled") {
+          renderAlerts(alerts.value);
+          alertsStatus.textContent = alerts.value.length ? "Live alerts loaded for this area." : "No active high-priority alerts for this area right now.";
+        } else {
+          alertsStatus.textContent = "Weather alerts could not be loaded right now.";
+          alertsList.innerHTML = "<p class=\"dashboard-note\">The National Weather Service alert feed is unavailable at the moment.</p>";
+        }
+
+        if (pointData.status === "fulfilled") {
+          const point = pointData.value.point || {};
+          const office = pointData.value.office || {};
+          renderInfoBox(forecastZoneBox, [{
+            title: office.name || point.gridId || "Forecast zone details",
+            description: `Forecast zone ${point.forecastZone ? point.forecastZone.split("/").pop() : "not listed"} and county ${point.county ? point.county.split("/").pop() : "not listed"} serve this point.`,
+            links: [
+              point.forecast ? { label: "Open forecast", href: point.forecast } : null,
+              office["@id"] ? { label: "Forecast office", href: office["@id"] } : null
+            ].filter(Boolean)
+          }], "Forecast zone information is not available for this location.");
+        } else {
+          renderInfoBox(forecastZoneBox, [], "Forecast zone information is not available for this location.");
+        }
+
+        const outageInfo = outage.status === "fulfilled" ? outage.value : { customersOut: null, link: "https://poweroutage.us/us" };
+        renderInfoBox(powerOutageBox, [{
+          title: `${location.state || "State"} outage snapshot`,
+          description: outageInfo.customersOut
+            ? `PowerOutage.us currently shows about ${outageInfo.customersOut} customers out statewide.`
+            : "Open the statewide outage map for current utility-level details.",
+          links: [{ label: "Open outage map", href: outageInfo.link }]
+        }], "Power outage information is not available right now.");
+
+        renderInfoBox(roadConditionsBox, [{
+          title: `${stateCode || location.state || "State"} travel conditions`,
+          description: "Use the state road-condition map for closures, winter travel, flood impacts, and camera views.",
+          links: [{
+            label: state511Links[stateCode] ? "Open state 511 / travel map" : "Open 511 directory",
+            href: state511Links[stateCode] || "https://ops.fhwa.dot.gov/511/511.htm"
+          }]
+        }], "Road-condition information is not available right now.");
+
+        renderInfoBox(airQualityBox, [{
+          title: "AirNow air quality",
+          description: "Live air quality data often needs a dedicated API key, so this page links you to the official AirNow map for the searched area.",
+          links: [{
+            label: "Open AirNow",
+            href: `https://www.airnow.gov/?city=${encodeURIComponent(location.town || location.county || "")}&state=${encodeURIComponent(stateCode)}&country=USA`
+          }]
+        }], "Air quality information is not available right now.");
+      } catch (error) {
+        alertsStatus.textContent = "Live weather and outage data could not be loaded right now.";
+        alertsList.innerHTML = "<p class=\"dashboard-note\">Please try again in a moment or use trusted local weather and utility sources.</p>";
+        renderInfoBox(forecastZoneBox, [], "Forecast zone information is unavailable.");
+        renderInfoBox(powerOutageBox, [], "Power outage information is unavailable.");
+        renderInfoBox(roadConditionsBox, [], "Road-condition information is unavailable.");
+        renderInfoBox(airQualityBox, [], "Air quality information is unavailable.");
+      }
+    }
+
+    async function loadFromQuery(query) {
+      alertsLoaded = true;
+      localStorage.setItem(preferredWeatherLocationKey, query);
+      const location = await geocodePlace(query);
+      return populateLiveData(location);
+    }
+
+    function tryBrowserLocation() {
+      if (!navigator.geolocation) {
+        alertsStatus.textContent = "Browser location is not available here. Enter a ZIP code, town, or county instead.";
+        return;
+      }
+
+      alertsStatus.textContent = "Checking browser location...";
+      navigator.geolocation.getCurrentPosition(async (position) => {
+        try {
+          const location = await reverseGeocodePlace(position.coords.latitude, position.coords.longitude);
+          dashboardLocationQuery.value = [location.town, location.county, location.state].filter(Boolean).join(", ") || "";
+          await populateLiveData(location);
+        } catch (error) {
+          alertsStatus.textContent = "Browser location was found, but live data could not be loaded.";
+        }
+      }, () => {
+        alertsStatus.textContent = "Browser location was not granted. Enter a ZIP code, town, or county instead.";
+      }, { enableHighAccuracy: false, timeout: 12000 });
+    }
+
+    alertsToggle.addEventListener("click", () => {
+      if (!alertsBody.hidden && !alertsLoaded) {
+        alertsLoaded = true;
+        const savedQuery = localStorage.getItem(preferredWeatherLocationKey);
+        if (savedQuery) {
+          dashboardLocationQuery.value = savedQuery;
+          loadFromQuery(savedQuery).catch(() => {
+            alertsStatus.textContent = "Saved location could not be loaded. Please enter a location below.";
+          });
+        } else {
+          alertsStatus.textContent = "Enter a ZIP code, town, or county, or use your browser location.";
+        }
+      }
+    });
+
+    loadLiveDataButton.addEventListener("click", () => {
+      const query = dashboardLocationQuery.value.trim();
+
+      if (!query) {
+        alertsStatus.textContent = "Enter a ZIP code, town, or county first.";
+        return;
+      }
+
+      loadFromQuery(query).catch((error) => {
+        alertsStatus.textContent = error instanceof Error ? error.message : "Live data could not be loaded for that location.";
+      });
+    });
+
+    useMyLocationButton.addEventListener("click", () => {
+      tryBrowserLocation();
+    });
+
+    renderOutages();
+</script>
+<script>
+  (function () {
+    const menu = document.querySelector("#site-menu");
+    const button = document.querySelector("#site-menu-button");
+
+    if (!menu || !button) {
+      return;
+    }
+
+    const groups = [...menu.querySelectorAll(".site-menu-group")];
+    const groupToggles = [...menu.querySelectorAll(".site-menu-group-toggle")];
+
+    function closeGroups() {
+      groups.forEach((group) => {
+        group.classList.remove("is-open");
+        const toggle = group.querySelector(".site-menu-group-toggle");
+        if (toggle) {
+          toggle.setAttribute("aria-expanded", "false");
+        }
+      });
+    }
+
+    function closeMenu() {
+      menu.classList.remove("is-open");
+      button.setAttribute("aria-expanded", "false");
+      closeGroups();
+    }
+
+    button.addEventListener("click", (event) => {
+      event.stopPropagation();
+      const isOpen = menu.classList.toggle("is-open");
+      button.setAttribute("aria-expanded", String(isOpen));
+      if (!isOpen) {
+        closeGroups();
+      }
+    });
+
+    groupToggles.forEach((toggle) => {
+      toggle.addEventListener("click", (event) => {
+        event.stopPropagation();
+        const group = toggle.closest(".site-menu-group");
+        const willOpen = !group.classList.contains("is-open");
+        closeGroups();
+        if (willOpen) {
+          group.classList.add("is-open");
+          toggle.setAttribute("aria-expanded", "true");
+        }
+      });
+    });
+
+    menu.querySelectorAll("a.site-menu-link").forEach((link) => {
+      link.addEventListener("click", () => {
+        closeMenu();
+      });
+    });
+
+    document.addEventListener("click", (event) => {
+      if (!menu.contains(event.target)) {
+        closeMenu();
+      }
+    });
+  })();
+</script>
+</body>
+</html>
+

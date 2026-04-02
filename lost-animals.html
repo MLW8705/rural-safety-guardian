@@ -1,0 +1,1215 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lost Animals Tracker | Rural Safety Guardian</title>
+  <meta
+    name="description"
+    content="Track missing pets and livestock on this device with local-only storage."
+  >
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Source+Sans+3:wght@400;600;700&display=swap"
+    rel="stylesheet"
+  >
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .site-menu {
+      position: fixed;
+      top: 16px;
+      left: 16px;
+      z-index: 60;
+    }
+
+    .site-menu-button {
+      min-width: 110px;
+    }
+
+    .site-menu-panel {
+      display: none;
+      margin-top: 10px;
+      padding: 10px;
+      border-radius: 18px;
+      background: rgba(248, 244, 234, 0.98);
+      border: 1px solid rgba(34, 75, 67, 0.12);
+      box-shadow: var(--shadow);
+    }
+
+    .site-menu.is-open .site-menu-panel {
+      display: grid;
+      gap: 8px;
+    }
+
+    .site-menu-link {
+      display: block;
+      padding: 0.72rem 0.9rem;
+      border-radius: 14px;
+      color: var(--pine);
+      text-decoration: none;
+      font-weight: 700;
+      background: rgba(34, 75, 67, 0.06);
+    }
+
+    .page-shell {
+      margin-top: 112px;
+    }
+
+    .tracker-shell {
+      display: grid;
+      gap: 22px;
+    }
+
+    .tracker-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+      margin-top: 22px;
+    }
+
+    .tracker-form-card,
+    .tracker-list-card {
+      padding: 22px;
+      border-radius: 22px;
+      background: rgba(255, 255, 255, 0.7);
+      border: 1px solid rgba(34, 75, 67, 0.1);
+    }
+
+    .tracker-form {
+      display: grid;
+      gap: 14px;
+    }
+
+    .tracker-form input,
+    .tracker-form select,
+    .tracker-form textarea {
+      width: 100%;
+      padding: 0.9rem 1rem;
+      border: 1px solid rgba(34, 75, 67, 0.18);
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.92);
+      color: var(--ink);
+      font: 600 1rem "Source Sans 3", sans-serif;
+    }
+
+    .tracker-form textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .tracker-actions,
+    .animal-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .tracker-toolbar {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .tracker-status,
+    .privacy-note,
+    .empty-note {
+      margin: 0;
+      color: rgba(24, 33, 38, 0.72);
+    }
+
+    .tracker-status {
+      min-height: 1.4rem;
+      font-weight: 700;
+      color: var(--pine);
+    }
+
+    .animal-list {
+      display: grid;
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .animal-group {
+      min-height: 0;
+    }
+
+    .animal-group-body {
+      display: grid;
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    .animal-card {
+      min-height: 0;
+      background: rgba(255, 255, 255, 0.86);
+    }
+
+    .animal-card.found {
+      opacity: 0.72;
+    }
+
+    .animal-card .print-card-toggle,
+    .animal-group .print-card-toggle {
+      align-items: center;
+    }
+
+    .animal-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .animal-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 999px;
+      background: rgba(34, 75, 67, 0.1);
+      font-size: 0.95rem;
+    }
+
+    .animal-meta {
+      display: grid;
+      gap: 12px;
+    }
+
+    .animal-meta p {
+      margin: 0;
+      line-height: 1.6;
+    }
+
+    .animal-meta strong {
+      color: var(--pine);
+    }
+
+    .animal-photo {
+      width: 120px;
+      max-height: 120px;
+      object-fit: cover;
+      max-width: 100%;
+      border-radius: 16px;
+      border: 1px solid rgba(34, 75, 67, 0.12);
+    }
+
+    .animal-photo-button {
+      display: inline-flex;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      cursor: pointer;
+    }
+
+    .animal-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .text-link {
+      color: var(--pine);
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .photo-modal {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: rgba(24, 33, 38, 0.78);
+      z-index: 50;
+    }
+
+    .photo-modal.is-open {
+      display: flex;
+    }
+
+    .photo-modal-card {
+      width: min(760px, 100%);
+      padding: 18px;
+      border-radius: 24px;
+      background: rgba(248, 244, 234, 0.98);
+      box-shadow: var(--shadow);
+    }
+
+    .photo-modal-topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .photo-modal-image {
+      width: 100%;
+      max-height: 70vh;
+      object-fit: contain;
+      border-radius: 18px;
+      background: white;
+    }
+
+    .type-dog {
+      box-shadow: inset 0 6px 0 #9b7650;
+    }
+
+    .type-cat {
+      box-shadow: inset 0 6px 0 #7d6a52;
+    }
+
+    .type-horse {
+      box-shadow: inset 0 6px 0 #7c6343;
+    }
+
+    .type-cattle {
+      box-shadow: inset 0 6px 0 #b58742;
+    }
+
+    .type-goat {
+      box-shadow: inset 0 6px 0 #7a8f5b;
+    }
+
+    .type-sheep {
+      box-shadow: inset 0 6px 0 #6f8fb9;
+    }
+
+    .type-poultry {
+      box-shadow: inset 0 6px 0 #b6654a;
+    }
+
+    .type-other {
+      box-shadow: inset 0 6px 0 #4e7d68;
+    }
+
+    @media print {
+      .screen-only,
+      .tracker-toolbar,
+      .tracker-actions .button,
+      .animal-actions .button,
+      .animal-icon,
+      .animal-photo-button,
+      .animal-links,
+      .photo-modal,
+      #clear-all-animals {
+        display: none !important;
+      }
+
+      .site-menu {
+        display: none !important;
+      }
+
+      .page-shell {
+        margin-top: 0;
+      }
+    }
+
+    @media (max-width: 860px) {
+      .tracker-grid,
+      .tracker-toolbar {
+        grid-template-columns: 1fr;
+      }
+
+      .tracker-actions,
+      .animal-actions {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="site-menu screen-only" id="site-menu">
+    <button class="button ghost site-menu-button" type="button" id="site-menu-button" aria-expanded="false">Menu &#9662;</button>
+    <div class="site-menu-panel" id="site-menu-panel">
+      <div class="site-menu-group">
+        <button class="site-menu-group-toggle" type="button" aria-expanded="false">Guides</button>
+        <div class="site-menu-group-panel">
+          <a class="site-menu-link" href="weather-readiness.html">Weather Readiness</a>
+          <a class="site-menu-link" href="hazard-safety.html">Hazard Safety</a>
+          <a class="site-menu-link" href="emergency-kits.html">Emergency Kits &amp; Go-Bags</a>
+          <a class="site-menu-link" href="emergency-planning.html">Emergency Planning</a>
+          <a class="site-menu-link" href="cyber-safety.html">Cyber Safety Basics</a>
+        </div>
+      </div>
+      <div class="site-menu-group">
+        <button class="site-menu-group-toggle" type="button" aria-expanded="false">Tools</button>
+        <div class="site-menu-group-panel">
+          <a class="site-menu-link" href="lost-animals.html">Lost Animals Tracker</a>
+          <a class="site-menu-link" href="weather-outages.html">Weather &amp; Outages Dashboard</a>
+          <a class="site-menu-link" href="road-conditions.html">Road Conditions &amp; Travel Safety</a>
+        </div>
+      </div>
+      <div class="site-menu-group">
+        <button class="site-menu-group-toggle" type="button" aria-expanded="false">Local Resources</button>
+        <div class="site-menu-group-panel">
+          <a class="site-menu-link" href="local-contacts.html">Local Contacts &amp; Resources</a>
+          <a class="site-menu-link" href="lost-pets-livestock.html">Lost Pets &amp; Livestock</a>
+          <a class="site-menu-link" href="local-contacts.html#official-emergency-resources">Official Emergency Resources (U.S.)</a>
+        </div>
+      </div>
+      <div class="site-menu-group">
+        <button class="site-menu-group-toggle" type="button" aria-expanded="false">Printables</button>
+        <div class="site-menu-group-panel">
+          <a class="site-menu-link" href="preparedness-cards.html">Printable Preparedness Cards</a>
+        </div>
+      </div>
+      <div class="site-menu-group">
+        <button class="site-menu-group-toggle" type="button" aria-expanded="false">About</button>
+        <div class="site-menu-group-panel">
+          <a class="site-menu-link" href="about.html">About This Project</a>
+        </div>
+      </div>
+      <div class="site-menu-group">
+        <button class="site-menu-group-toggle" type="button" aria-expanded="false">Home</button>
+        <div class="site-menu-group-panel">
+          <a class="site-menu-link" href="index.html">Home (Dashboard)</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="page-shell">
+    <header class="hero">
+      <nav class="topbar">
+        <div class="brand">
+          <span class="brand-mark">RG</span>
+          <div>
+            <p class="eyebrow">Community Safety Hub</p>
+            <h1>Lost Animals Tracker</h1>
+          </div>
+        </div>
+        <div class="nav-actions">
+          <a class="button ghost screen-only" href="index.html">Back to Main Site</a>
+        </div>
+      </nav>
+
+      <div class="hero-grid">
+        <section class="hero-copy">
+          <p class="eyebrow">Track Missing Animals</p>
+          <h2>Keep your search notes, sightings, and contact details organized on this device.</h2>
+          <p class="lede">
+            Use this page to log missing pets and livestock, update details as the search changes, and mark animals as found when they return home.
+          </p>
+        </section>
+
+        <aside class="status-panel">
+          <p class="panel-title">Privacy Note</p>
+          <div class="status-card">
+            <span class="status-label">Stored only on this device</span>
+            <strong>Nothing is uploaded</strong>
+            <p class="privacy-note">
+              Entries and optional photos stay in this browser on this device using local storage only.
+            </p>
+          </div>
+          <p class="status-note">Consider keeping a paper backup for important search details if power or device access becomes limited.</p>
+        </aside>
+      </div>
+    </header>
+
+    <main class="tracker-shell">
+      <section class="section">
+        <div class="section-heading">
+          <p class="eyebrow">Missing Animal Log</p>
+          <h3>Add, update, and organize your search entries.</h3>
+        </div>
+
+        <div class="tracker-grid">
+          <div class="tracker-form-card">
+            <form class="tracker-form" id="animal-form">
+              <input type="hidden" id="animal-id">
+
+              <label class="field">
+                <span>Name</span>
+                <input id="animal-name" type="text" placeholder="Buddy, Daisy, Herd 3 lead mare" required>
+              </label>
+
+              <label class="field">
+                <span>Type</span>
+                <select id="animal-type" required>
+                  <option value="Dog">Dog</option>
+                  <option value="Cat">Cat</option>
+                  <option value="Horse">Horse</option>
+                  <option value="Cattle">Cattle</option>
+                  <option value="Goat">Goat</option>
+                  <option value="Sheep">Sheep</option>
+                  <option value="Poultry">Poultry</option>
+                  <option value="Other">Other</option>
+                </select>
+              </label>
+
+              <label class="field">
+                <span>Description</span>
+                <input id="animal-description" type="text" placeholder="Color, markings, tag, collar, breed, size" required>
+              </label>
+
+              <label class="field">
+                <span>Last seen location</span>
+                <input id="animal-location" type="text" placeholder="North pasture gate, county road bridge, school parking lot" required>
+              </label>
+
+              <label class="field">
+                <span>Notes</span>
+                <textarea id="animal-notes" placeholder="Temperament, sightings, who was notified, trailer needed, favorite food, special medical needs"></textarea>
+              </label>
+
+              <label class="field">
+                <span>Optional photo</span>
+                <input id="animal-photo" type="file" accept="image/*">
+              </label>
+
+              <div class="tracker-actions">
+                <button class="button" type="submit" id="save-animal">Save Entry</button>
+                <button class="button ghost" type="button" id="clear-animal-form">Clear Form</button>
+              </div>
+
+              <p class="tracker-status" id="animal-status" aria-live="polite"></p>
+            </form>
+          </div>
+
+          <div class="tracker-list-card">
+            <p class="panel-title">Saved Entries</p>
+            <p class="privacy-note">
+              These entries are stored only on the user's device, including optional photos saved locally in the browser.
+            </p>
+
+            <div class="tracker-toolbar screen-only">
+              <label class="field">
+                <span>Sort by</span>
+                <select id="sort-animals">
+                  <option value="recent">Most recently added</option>
+                  <option value="name">Alphabetical by name</option>
+                  <option value="type">By type</option>
+                </select>
+              </label>
+
+              <label class="field">
+                <span>Filter type</span>
+                <select id="filter-type">
+                  <option value="All">All types</option>
+                  <option value="Dog">Dog</option>
+                  <option value="Cat">Cat</option>
+                  <option value="Horse">Horse</option>
+                  <option value="Cattle">Cattle</option>
+                  <option value="Goat">Goat</option>
+                  <option value="Sheep">Sheep</option>
+                  <option value="Poultry">Poultry</option>
+                  <option value="Other">Other</option>
+                </select>
+              </label>
+            </div>
+
+            <div class="tracker-actions screen-only">
+              <button class="button ghost" type="button" id="clear-all-animals">Clear All</button>
+            </div>
+
+            <div class="animal-list" id="animal-list">
+              <p class="empty-note" id="animal-empty">No missing animal entries yet. Add your first search entry using the form.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+        </main>
+    <footer class="site-footer">
+      <div><p class="eyebrow">Rural Safety Guardian</p><p>Use the dashboard, guides, tools, and printable resources to stay organized before and during rural emergencies.</p></div>
+      <div class="footer-links"><a href="index.html">Home</a><a href="local-contacts.html">Contacts</a><a href="weather-outages.html">Weather</a><a href="preparedness-cards.html">Printables</a></div>
+    </footer>
+  </div>
+
+  <script>
+    const storageKey = "ruralGuardianLostAnimals";
+
+    const animalForm = document.querySelector("#animal-form");
+    const animalIdInput = document.querySelector("#animal-id");
+    const animalNameInput = document.querySelector("#animal-name");
+    const animalTypeInput = document.querySelector("#animal-type");
+    const animalDescriptionInput = document.querySelector("#animal-description");
+    const animalLocationInput = document.querySelector("#animal-location");
+    const animalNotesInput = document.querySelector("#animal-notes");
+    const animalPhotoInput = document.querySelector("#animal-photo");
+    const saveAnimalButton = document.querySelector("#save-animal");
+    const clearAnimalFormButton = document.querySelector("#clear-animal-form");
+    const clearAllAnimalsButton = document.querySelector("#clear-all-animals");
+    const animalStatus = document.querySelector("#animal-status");
+    const animalList = document.querySelector("#animal-list");
+    const animalEmpty = document.querySelector("#animal-empty");
+    const sortAnimalsSelect = document.querySelector("#sort-animals");
+    const filterTypeSelect = document.querySelector("#filter-type");
+    const pageShell = document.querySelector(".page-shell");
+
+    const typeMeta = {
+      Dog: { icon: "D", className: "type-dog" },
+      Cat: { icon: "C", className: "type-cat" },
+      Horse: { icon: "H", className: "type-horse" },
+      Cattle: { icon: "B", className: "type-cattle" },
+      Goat: { icon: "G", className: "type-goat" },
+      Sheep: { icon: "S", className: "type-sheep" },
+      Poultry: { icon: "P", className: "type-poultry" },
+      Other: { icon: "â€¢", className: "type-other" }
+    };
+
+    function loadAnimals() {
+      const stored = localStorage.getItem(storageKey);
+
+      if (!stored) {
+        return [];
+      }
+
+      try {
+        const parsed = JSON.parse(stored);
+        return Array.isArray(parsed) ? parsed : [];
+      } catch (error) {
+        return [];
+      }
+    }
+
+    function saveAnimals(entries) {
+      localStorage.setItem(storageKey, JSON.stringify(entries));
+    }
+
+    function setAnimalStatus(message) {
+      animalStatus.textContent = message;
+    }
+
+    function resetAnimalForm() {
+      animalForm.reset();
+      animalIdInput.value = "";
+      animalTypeInput.value = "Dog";
+      saveAnimalButton.textContent = "Save Entry";
+      setAnimalStatus("");
+    }
+
+    function getTypeMeta(type) {
+      return typeMeta[type] || typeMeta.Other;
+    }
+
+    function readPhotoAsDataUrl(file) {
+      return new Promise((resolve, reject) => {
+        if (!file) {
+          resolve("");
+          return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = () => resolve(typeof reader.result === "string" ? reader.result : "");
+        reader.onerror = () => reject(new Error("Could not read the selected photo."));
+        reader.readAsDataURL(file);
+      });
+    }
+
+    function startAnimalEdit(entryId) {
+      const entries = loadAnimals();
+      const entry = entries.find((item) => item.id === entryId);
+
+      if (!entry) {
+        return;
+      }
+
+      animalIdInput.value = entry.id;
+      animalNameInput.value = entry.name;
+      animalTypeInput.value = entry.type;
+      animalDescriptionInput.value = entry.description;
+      animalLocationInput.value = entry.location;
+      animalNotesInput.value = entry.notes;
+      saveAnimalButton.textContent = "Update Entry";
+      setAnimalStatus("Editing saved entry.");
+      animalNameInput.focus();
+    }
+
+    function deleteAnimal(entryId) {
+      const entries = loadAnimals().filter((item) => item.id !== entryId);
+      saveAnimals(entries);
+      renderAnimals();
+
+      if (animalIdInput.value === entryId) {
+        resetAnimalForm();
+      }
+
+      setAnimalStatus("Entry deleted from this device.");
+    }
+
+    function markAnimalFound(entryId) {
+      const confirmed = window.confirm("Mark this animal as found and remove the entry from this device?");
+
+      if (!confirmed) {
+        return;
+      }
+
+      deleteAnimal(entryId);
+      setAnimalStatus("Animal marked as found and removed from this device.");
+    }
+
+    function buildMapsUrl(location) {
+      return "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(location);
+    }
+
+    function buildShareText(entry) {
+      return [
+        "MISSING ANIMAL",
+        `Type: ${entry.type}`,
+        `Name: ${entry.name}`,
+        `Last seen: ${entry.location}`,
+        `Description: ${entry.description}`,
+        `Notes: ${entry.notes || "No extra notes"}`,
+        "If you see them, please contact me. Thank you."
+      ].join("\n");
+    }
+
+    async function shareEntry(entry) {
+      const text = buildShareText(entry);
+
+      if (navigator.share) {
+        try {
+          await navigator.share({
+            title: `Missing animal: ${entry.name}`,
+            text
+          });
+          setAnimalStatus("Entry shared from this device.");
+          return;
+        } catch (error) {
+          if (error && error.name === "AbortError") {
+            return;
+          }
+        }
+      }
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(text);
+        setAnimalStatus("Entry details copied to clipboard.");
+        return;
+      }
+
+      window.prompt("Copy these missing animal details:", text);
+    }
+
+    function openPhotoPreview(entry) {
+      if (!entry.photoDataUrl) {
+        return;
+      }
+
+      const modal = document.createElement("div");
+      modal.className = "photo-modal screen-only is-open";
+
+      const card = document.createElement("div");
+      card.className = "photo-modal-card";
+
+      const topbar = document.createElement("div");
+      topbar.className = "photo-modal-topbar";
+
+      const title = document.createElement("h3");
+      title.textContent = `${entry.name} Photo`;
+
+      const closeButton = document.createElement("button");
+      closeButton.className = "button ghost";
+      closeButton.type = "button";
+      closeButton.textContent = "Close";
+
+      const image = document.createElement("img");
+      image.className = "photo-modal-image";
+      image.src = entry.photoDataUrl;
+      image.alt = `${entry.name} enlarged preview`;
+
+      function closeModal() {
+        modal.remove();
+      }
+
+      closeButton.addEventListener("click", closeModal);
+      modal.addEventListener("click", (event) => {
+        if (event.target === modal) {
+          closeModal();
+        }
+      });
+
+      topbar.append(title, closeButton);
+      card.append(topbar, image);
+      modal.append(card);
+      document.body.append(modal);
+    }
+
+    function printPoster(entry) {
+      const posterWindow = window.open("", "_blank", "width=900,height=1100");
+
+      if (!posterWindow) {
+        setAnimalStatus("Allow pop-ups to print a missing poster.");
+        return;
+      }
+
+      const safeNotes = entry.notes || "No extra notes added.";
+      const imageMarkup = entry.photoDataUrl
+        ? `<img src="${entry.photoDataUrl}" alt="${entry.name} poster photo" style="max-width:100%;max-height:360px;border:1px solid #777;object-fit:contain;background:#fff;">`
+        : `<div style="padding:24px;border:1px dashed #999;">No photo provided</div>`;
+
+      posterWindow.document.write(`
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+          <meta charset="UTF-8">
+          <title>Missing Animal Poster - ${entry.name}</title>
+          <style>
+            @page { size: letter portrait; margin: 0.5in; }
+            html, body {
+              margin: 0;
+              padding: 0;
+              background: #fff;
+              color: #111;
+              font-family: Georgia, "Times New Roman", serif;
+            }
+            body {
+              -webkit-print-color-adjust: exact;
+              print-color-adjust: exact;
+            }
+            .poster {
+              box-sizing: border-box;
+              width: 100%;
+              max-width: 7.5in;
+              min-height: 10in;
+              margin: 0 auto;
+              padding: 0.28in;
+              border: 2px solid #111;
+              page-break-inside: avoid;
+            }
+            .kicker {
+              margin: 0 0 0.08in;
+              text-align: center;
+              font: 700 0.95rem Arial, sans-serif;
+              letter-spacing: 0.18em;
+              text-transform: uppercase;
+            }
+            h1 {
+              margin: 0 0 0.12in;
+              text-align: center;
+              font-size: 2.6rem;
+              letter-spacing: 0.05em;
+              text-transform: uppercase;
+            }
+            h2 {
+              margin: 0 0 0.22in;
+              text-align: center;
+              font-size: 1.55rem;
+            }
+            .photo {
+              margin: 0 0 0.24in;
+              text-align: center;
+            }
+            .details {
+              display: grid;
+              gap: 0.12in;
+            }
+            p {
+              margin: 0;
+              line-height: 1.45;
+              font-size: 1.02rem;
+              text-align: left;
+            }
+            .label {
+              font-weight: 700;
+            }
+            .notes {
+              min-height: 1in;
+            }
+            @media print {
+              .screen-only { display: none !important; }
+              .poster { margin: 0; }
+            }
+          </style>
+        </head>
+        <body>
+          <div class="poster">
+            <div class="screen-only" style="margin-bottom:16px; text-align:center;">
+              <button onclick="window.print()">Print Poster</button>
+            </div>
+            <p class="kicker">Rural Safety Guardian</p>
+            <h1>MISSING ANIMAL</h1>
+            <h2>${entry.name}</h2>
+            <div class="photo">${imageMarkup}</div>
+            <div class="details">
+              <p><span class="label">Type:</span> ${entry.type}</p>
+              <p><span class="label">Description:</span> ${entry.description}</p>
+              <p><span class="label">Last Seen Location:</span> ${entry.location}</p>
+              <p class="notes"><span class="label">Notes:</span> ${safeNotes}</p>
+            </div>
+          </div>
+</body>
+        </html>
+      `);
+
+      posterWindow.document.close();
+      posterWindow.focus();
+    }
+
+    function createAnimalCard(entry, isOpen) {
+      const article = document.createElement("article");
+      article.className = `print-card animal-card ${getTypeMeta(entry.type).className}`;
+
+      if (entry.found) {
+        article.classList.add("found");
+      }
+
+      if (isOpen) {
+        article.classList.add("is-open");
+      }
+
+      const toggle = document.createElement("button");
+      toggle.className = "print-card-toggle";
+      toggle.type = "button";
+      toggle.setAttribute("aria-expanded", String(isOpen));
+
+      const header = document.createElement("span");
+      const badge = document.createElement("span");
+      badge.className = "animal-badge";
+
+      const icon = document.createElement("span");
+      icon.className = "animal-icon screen-only";
+      icon.textContent = getTypeMeta(entry.type).icon;
+
+      const tag = document.createElement("span");
+      tag.className = "print-card-tag";
+      tag.textContent = entry.found ? `${entry.type} â€¢ Found` : entry.type;
+
+      const title = document.createElement("h4");
+      title.textContent = entry.name;
+
+      badge.append(icon, tag);
+      header.append(badge, title);
+
+      const toggleIcon = document.createElement("span");
+      toggleIcon.className = "print-card-icon";
+      toggleIcon.setAttribute("aria-hidden", "true");
+      toggleIcon.textContent = isOpen ? "-" : "+";
+
+      toggle.append(header, toggleIcon);
+
+      const body = document.createElement("div");
+      body.className = "print-card-body animal-meta";
+      body.hidden = !isOpen;
+
+      const description = document.createElement("p");
+      description.innerHTML = "<strong>Description:</strong> " + entry.description;
+
+      const location = document.createElement("p");
+      location.innerHTML = "<strong>Last seen:</strong> " + entry.location;
+
+      const notes = document.createElement("p");
+      notes.innerHTML = "<strong>Notes:</strong> " + (entry.notes || "No extra notes added.");
+
+      body.append(description, location, notes);
+
+      if (entry.photoDataUrl) {
+        const photoButton = document.createElement("button");
+        photoButton.className = "animal-photo-button screen-only";
+        photoButton.type = "button";
+
+        const photo = document.createElement("img");
+        photo.className = "animal-photo";
+        photo.src = entry.photoDataUrl;
+        photo.alt = `${entry.name} saved reference photo`;
+        photoButton.append(photo);
+        photoButton.addEventListener("click", () => {
+          openPhotoPreview(entry);
+        });
+        body.append(photoButton);
+      }
+
+      const links = document.createElement("div");
+      links.className = "animal-links screen-only";
+
+      const mapsLink = document.createElement("a");
+      mapsLink.className = "text-link";
+      mapsLink.href = buildMapsUrl(entry.location);
+      mapsLink.target = "_blank";
+      mapsLink.rel = "noreferrer";
+      mapsLink.textContent = "Open in Google Maps";
+
+      links.append(mapsLink);
+      body.append(links);
+
+      const actions = document.createElement("div");
+      actions.className = "animal-actions";
+
+      const editButton = document.createElement("button");
+      editButton.className = "button ghost";
+      editButton.type = "button";
+      editButton.textContent = "Edit";
+      editButton.addEventListener("click", () => {
+        startAnimalEdit(entry.id);
+      });
+
+      const foundButton = document.createElement("button");
+      foundButton.className = "button ghost";
+      foundButton.type = "button";
+      foundButton.textContent = "Mark Found";
+      foundButton.addEventListener("click", () => {
+        markAnimalFound(entry.id);
+      });
+
+      const shareButton = document.createElement("button");
+      shareButton.className = "button ghost screen-only";
+      shareButton.type = "button";
+      shareButton.textContent = "Share";
+      shareButton.addEventListener("click", async () => {
+        await shareEntry(entry);
+      });
+
+      const printButton = document.createElement("button");
+      printButton.className = "button ghost screen-only";
+      printButton.type = "button";
+      printButton.textContent = "Print Missing Poster";
+      printButton.addEventListener("click", () => {
+        printPoster(entry);
+      });
+
+      const deleteButton = document.createElement("button");
+      deleteButton.className = "button";
+      deleteButton.type = "button";
+      deleteButton.textContent = "Delete";
+      deleteButton.addEventListener("click", () => {
+        deleteAnimal(entry.id);
+      });
+
+      actions.append(editButton, foundButton, shareButton, printButton, deleteButton);
+      body.append(actions);
+
+      toggle.addEventListener("click", () => {
+        const open = toggle.getAttribute("aria-expanded") === "true";
+        toggle.setAttribute("aria-expanded", String(!open));
+        article.classList.toggle("is-open", !open);
+        body.hidden = open;
+        toggleIcon.textContent = open ? "+" : "-";
+      });
+
+      article.append(toggle, body);
+      return article;
+    }
+
+    function createTypeGroup(type, entries, isOpen) {
+      const article = document.createElement("article");
+      article.className = `print-card animal-group ${getTypeMeta(type).className}`;
+
+      if (isOpen) {
+        article.classList.add("is-open");
+      }
+
+      const toggle = document.createElement("button");
+      toggle.className = "print-card-toggle";
+      toggle.type = "button";
+      toggle.setAttribute("aria-expanded", String(isOpen));
+
+      const header = document.createElement("span");
+      const badge = document.createElement("span");
+      badge.className = "animal-badge";
+
+      const icon = document.createElement("span");
+      icon.className = "animal-icon screen-only";
+      icon.textContent = getTypeMeta(type).icon;
+
+      const tag = document.createElement("span");
+      tag.className = "print-card-tag";
+      tag.textContent = `${type} (${entries.length})`;
+
+      const title = document.createElement("h4");
+      title.textContent = `${type} Entries`;
+
+      badge.append(icon, tag);
+      header.append(badge, title);
+
+      const toggleIcon = document.createElement("span");
+      toggleIcon.className = "print-card-icon";
+      toggleIcon.setAttribute("aria-hidden", "true");
+      toggleIcon.textContent = isOpen ? "-" : "+";
+
+      toggle.append(header, toggleIcon);
+
+      const body = document.createElement("div");
+      body.className = "print-card-body animal-group-body";
+      body.hidden = !isOpen;
+
+      entries.forEach((entry, index) => {
+        body.append(createAnimalCard(entry, index === 0));
+      });
+
+      toggle.addEventListener("click", () => {
+        const open = toggle.getAttribute("aria-expanded") === "true";
+        toggle.setAttribute("aria-expanded", String(!open));
+        article.classList.toggle("is-open", !open);
+        body.hidden = open;
+        toggleIcon.textContent = open ? "+" : "-";
+      });
+
+      article.append(toggle, body);
+      return article;
+    }
+
+    function getVisibleAnimals() {
+      const entries = loadAnimals();
+      const filterValue = filterTypeSelect.value;
+      const sortValue = sortAnimalsSelect.value;
+
+      const filtered = filterValue === "All"
+        ? entries
+        : entries.filter((entry) => entry.type === filterValue);
+
+      const sorted = [...filtered];
+
+      if (sortValue === "name") {
+        sorted.sort((a, b) => a.name.localeCompare(b.name));
+      } else if (sortValue === "type") {
+        sorted.sort((a, b) => a.type.localeCompare(b.type) || a.name.localeCompare(b.name));
+      } else {
+        sorted.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+      }
+
+      return sorted;
+    }
+
+    function renderAnimals() {
+      const entries = getVisibleAnimals();
+      animalList.innerHTML = "";
+
+      if (entries.length === 0) {
+        animalList.append(animalEmpty);
+        return;
+      }
+
+      const grouped = new Map();
+
+      entries.forEach((entry) => {
+        if (!grouped.has(entry.type)) {
+          grouped.set(entry.type, []);
+        }
+
+        grouped.get(entry.type).push(entry);
+      });
+
+      [...grouped.entries()].forEach(([type, items], index) => {
+        animalList.append(createTypeGroup(type, items, index === 0));
+      });
+    }
+
+    animalForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      const entries = loadAnimals();
+      const existingId = animalIdInput.value;
+      const existingEntry = entries.find((entry) => entry.id === existingId);
+      const selectedFile = animalPhotoInput.files[0];
+      const photoDataUrl = selectedFile
+        ? await readPhotoAsDataUrl(selectedFile)
+        : (existingEntry?.photoDataUrl || "");
+
+      const entry = {
+        id: existingId || String(Date.now()),
+        name: animalNameInput.value.trim(),
+        type: animalTypeInput.value,
+        description: animalDescriptionInput.value.trim(),
+        location: animalLocationInput.value.trim(),
+        notes: animalNotesInput.value.trim(),
+        photoDataUrl,
+        createdAt: existingEntry?.createdAt || Date.now()
+      };
+
+      const nextEntries = existingId
+        ? entries.map((item) => (item.id === existingId ? entry : item))
+        : [...entries, entry];
+
+      saveAnimals(nextEntries);
+      renderAnimals();
+      resetAnimalForm();
+      setAnimalStatus(existingId ? "Entry updated on this device." : "Entry saved on this device.");
+    });
+
+    clearAnimalFormButton.addEventListener("click", () => {
+      resetAnimalForm();
+      setAnimalStatus("Form cleared.");
+    });
+
+    clearAllAnimalsButton.addEventListener("click", () => {
+      const confirmed = window.confirm("Clear all saved missing animal entries from this device?");
+
+      if (!confirmed) {
+        return;
+      }
+
+      localStorage.removeItem(storageKey);
+      renderAnimals();
+      resetAnimalForm();
+      setAnimalStatus("All saved entries were removed from this device.");
+    });
+
+    sortAnimalsSelect.addEventListener("change", () => {
+      renderAnimals();
+    });
+
+    filterTypeSelect.addEventListener("change", () => {
+      renderAnimals();
+    });
+
+    renderAnimals();
+</script>
+<script>
+  (function () {
+    const menu = document.querySelector("#site-menu");
+    const button = document.querySelector("#site-menu-button");
+
+    if (!menu || !button) {
+      return;
+    }
+
+    const groups = [...menu.querySelectorAll(".site-menu-group")];
+    const groupToggles = [...menu.querySelectorAll(".site-menu-group-toggle")];
+
+    function closeGroups() {
+      groups.forEach((group) => {
+        group.classList.remove("is-open");
+        const toggle = group.querySelector(".site-menu-group-toggle");
+        if (toggle) {
+          toggle.setAttribute("aria-expanded", "false");
+        }
+      });
+    }
+
+    function closeMenu() {
+      menu.classList.remove("is-open");
+      button.setAttribute("aria-expanded", "false");
+      closeGroups();
+    }
+
+    button.addEventListener("click", (event) => {
+      event.stopPropagation();
+      const isOpen = menu.classList.toggle("is-open");
+      button.setAttribute("aria-expanded", String(isOpen));
+      if (!isOpen) {
+        closeGroups();
+      }
+    });
+
+    groupToggles.forEach((toggle) => {
+      toggle.addEventListener("click", (event) => {
+        event.stopPropagation();
+        const group = toggle.closest(".site-menu-group");
+        const willOpen = !group.classList.contains("is-open");
+        closeGroups();
+        if (willOpen) {
+          group.classList.add("is-open");
+          toggle.setAttribute("aria-expanded", "true");
+        }
+      });
+    });
+
+    menu.querySelectorAll("a.site-menu-link").forEach((link) => {
+      link.addEventListener("click", () => {
+        closeMenu();
+      });
+    });
+
+    document.addEventListener("click", (event) => {
+      if (!menu.contains(event.target)) {
+        closeMenu();
+      }
+    });
+  })();
+</script>
+</body>
+</html>
+

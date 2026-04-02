@@ -1,0 +1,799 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Custom Local Resources | Rural Safety Guardian</title>
+  <meta
+    name="description"
+    content="Save your own local emergency contacts and community resources on this device."
+  >
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Source+Sans+3:wght@400;600;700&display=swap"
+    rel="stylesheet"
+  >
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .resource-shell {
+      display: grid;
+      gap: 22px;
+    }
+
+    .resource-form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+      margin-top: 22px;
+    }
+
+    .resource-form-card,
+    .resource-list-card {
+      padding: 22px;
+      border-radius: 22px;
+      background: rgba(255, 255, 255, 0.7);
+      border: 1px solid rgba(34, 75, 67, 0.1);
+    }
+
+    .resource-form {
+      display: grid;
+      gap: 14px;
+    }
+
+    .resource-form textarea,
+    .resource-form select,
+    .resource-form input {
+      width: 100%;
+      padding: 0.9rem 1rem;
+      border: 1px solid rgba(34, 75, 67, 0.18);
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.92);
+      color: var(--ink);
+      font: 600 1rem "Source Sans 3", sans-serif;
+    }
+
+    .resource-form textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .resource-actions,
+    .saved-resource-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .resource-toolbar {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .device-note,
+    .resource-empty,
+    .resource-status {
+      margin: 0;
+      color: rgba(24, 33, 38, 0.72);
+    }
+
+    .resource-status {
+      min-height: 1.4rem;
+      font-weight: 700;
+      color: var(--pine);
+    }
+
+    .saved-resource-list {
+      display: grid;
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .resource-group {
+      min-height: 0;
+    }
+
+    .resource-group .print-card-toggle {
+      align-items: center;
+    }
+
+    .resource-group-body {
+      display: grid;
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    .saved-resource {
+      min-height: 0;
+      background: rgba(255, 255, 255, 0.86);
+    }
+
+    .saved-resource .print-card-toggle {
+      align-items: center;
+    }
+
+    .saved-resource .print-card-tag {
+      margin-bottom: 4px;
+    }
+
+    .saved-resource-meta {
+      display: grid;
+      gap: 12px;
+    }
+
+    .saved-resource-meta p {
+      margin: 0;
+      line-height: 1.6;
+    }
+
+    .saved-resource-meta strong {
+      color: var(--pine);
+    }
+
+    .category-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .category-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 999px;
+      font-size: 0.95rem;
+      background: rgba(34, 75, 67, 0.1);
+    }
+
+    .category-emergency {
+      box-shadow: inset 0 6px 0 #b6654a;
+    }
+
+    .category-utility {
+      box-shadow: inset 0 6px 0 #b58742;
+    }
+
+    .category-medical {
+      box-shadow: inset 0 6px 0 #7a8f5b;
+    }
+
+    .category-veterinary {
+      box-shadow: inset 0 6px 0 #9b7650;
+    }
+
+    .category-neighbor {
+      box-shadow: inset 0 6px 0 #4e7d68;
+    }
+
+    .category-school {
+      box-shadow: inset 0 6px 0 #56739b;
+    }
+
+    .category-work {
+      box-shadow: inset 0 6px 0 #7d6a52;
+    }
+
+    .category-family {
+      box-shadow: inset 0 6px 0 #6f8fb9;
+    }
+
+    .category-other {
+      box-shadow: inset 0 6px 0 #7c6343;
+    }
+
+    @media print {
+      .category-icon,
+      .resource-toolbar,
+      .saved-resource-actions .button,
+      #clear-all-resources {
+        display: none !important;
+      }
+    }
+
+    @media (max-width: 860px) {
+      .resource-form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .resource-toolbar {
+        grid-template-columns: 1fr;
+      }
+
+      .resource-actions,
+      .saved-resource-actions {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="site-menu screen-only" id="site-menu">
+    <button class="button ghost site-menu-button" type="button" id="site-menu-button" aria-expanded="false">Menu &#9662;</button>
+    <div class="site-menu-panel" id="site-menu-panel">
+      <div class="site-menu-group">
+        <button class="site-menu-group-toggle" type="button" aria-expanded="false">Guides</button>
+        <div class="site-menu-group-panel">
+          <a class="site-menu-link" href="weather-readiness.html">Weather Readiness</a>
+          <a class="site-menu-link" href="hazard-safety.html">Hazard Safety</a>
+          <a class="site-menu-link" href="emergency-kits.html">Emergency Kits &amp; Go-Bags</a>
+          <a class="site-menu-link" href="emergency-planning.html">Emergency Planning</a>
+          <a class="site-menu-link" href="cyber-safety.html">Cyber Safety Basics</a>
+        </div>
+      </div>
+      <div class="site-menu-group">
+        <button class="site-menu-group-toggle" type="button" aria-expanded="false">Tools</button>
+        <div class="site-menu-group-panel">
+          <a class="site-menu-link" href="lost-animals.html">Lost Animals Tracker</a>
+          <a class="site-menu-link" href="weather-outages.html">Weather &amp; Outages Dashboard</a>
+          <a class="site-menu-link" href="road-conditions.html">Road Conditions &amp; Travel Safety</a>
+        </div>
+      </div>
+      <div class="site-menu-group">
+        <button class="site-menu-group-toggle" type="button" aria-expanded="false">Local Resources</button>
+        <div class="site-menu-group-panel">
+          <a class="site-menu-link" href="local-contacts.html">Local Contacts &amp; Resources</a>
+          <a class="site-menu-link" href="lost-pets-livestock.html">Lost Pets &amp; Livestock</a>
+          <a class="site-menu-link" href="local-contacts.html#official-emergency-resources">Official Emergency Resources (U.S.)</a>
+        </div>
+      </div>
+      <div class="site-menu-group">
+        <button class="site-menu-group-toggle" type="button" aria-expanded="false">Printables</button>
+        <div class="site-menu-group-panel">
+          <a class="site-menu-link" href="preparedness-cards.html">Printable Preparedness Cards</a>
+        </div>
+      </div>
+      <div class="site-menu-group">
+        <button class="site-menu-group-toggle" type="button" aria-expanded="false">About</button>
+        <div class="site-menu-group-panel">
+          <a class="site-menu-link" href="about.html">About This Project</a>
+        </div>
+      </div>
+      <div class="site-menu-group">
+        <button class="site-menu-group-toggle" type="button" aria-expanded="false">Home</button>
+        <div class="site-menu-group-panel">
+          <a class="site-menu-link" href="index.html">Home (Dashboard)</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="page-shell">
+    <header class="hero">
+      <nav class="topbar">
+        <div class="brand">
+          <span class="brand-mark">RG</span>
+          <div>
+            <p class="eyebrow">Community Safety Hub</p>
+            <h1>Custom Local Resources</h1>
+          </div>
+        </div>
+        <div class="nav-actions">
+          <a class="button ghost screen-only" href="index.html">Back to Main Site</a>
+        </div>
+      </nav>
+
+      <div class="hero-grid">
+        <section class="hero-copy">
+          <p class="eyebrow">Your Personal Contact List</p>
+          <h2>Save your own trusted local numbers and notes in one easy place.</h2>
+          <p class="lede">
+            Add the providers, neighbors, clinics, utility numbers, and emergency contacts that matter most to your household.
+          </p>
+        </section>
+
+        <aside class="status-panel">
+          <p class="panel-title">On-Device Storage</p>
+          <div class="status-card">
+            <span class="status-label">Privacy Note</span>
+            <strong>Stored only on this device</strong>
+            <p class="device-note">
+              These custom entries stay in this browser on this device. They are not uploaded anywhere.
+            </p>
+          </div>
+          <p class="status-note">Use this page for local contact details you want quick access to during an emergency.</p>
+        </aside>
+      </div>
+    </header>
+
+    <main class="resource-shell">
+      <section class="section">
+        <div class="section-heading">
+          <p class="eyebrow">Build Your List</p>
+          <h3>Add and manage your own local resources.</h3>
+        </div>
+
+        <div class="resource-form-grid">
+          <div class="resource-form-card">
+            <form class="resource-form" id="resource-form">
+              <input type="hidden" id="resource-id">
+
+              <label class="field">
+                <span>Resource name</span>
+                <input id="resource-name" name="resourceName" type="text" placeholder="County Clinic, Neighbor John, Rural Electric Co-op" required>
+              </label>
+
+              <label class="field">
+                <span>Category</span>
+                <select id="resource-category" name="resourceCategory" required>
+                  <option value="Emergency">Emergency</option>
+                  <option value="Utility">Utility</option>
+                  <option value="Medical">Medical</option>
+                  <option value="Veterinary">Veterinary</option>
+                  <option value="Neighbor">Neighbor</option>
+                  <option value="School">School</option>
+                  <option value="Work">Work</option>
+                  <option value="Family">Family</option>
+                  <option value="Other">Other</option>
+                </select>
+              </label>
+
+              <label class="field">
+                <span>Phone</span>
+                <input id="resource-phone" name="resourcePhone" type="text" placeholder="555-123-4567" required>
+              </label>
+
+              <label class="field">
+                <span>Notes</span>
+                <textarea id="resource-notes" name="resourceNotes" placeholder="Gate code, after-hours details, address, best route, service area, or other reminders"></textarea>
+              </label>
+
+              <div class="resource-actions">
+                <button class="button" type="submit" id="save-resource">Save Resource</button>
+                <button class="button ghost" type="button" id="clear-form">Clear Form</button>
+              </div>
+
+              <p class="resource-status" id="resource-status" aria-live="polite"></p>
+            </form>
+          </div>
+
+          <div class="resource-list-card">
+            <p class="panel-title">Saved Resources</p>
+            <p class="device-note">
+              Entries are stored only on the user's device, so you may want to copy important numbers into a paper backup too.
+            </p>
+            <div class="resource-toolbar screen-only">
+              <label class="field">
+                <span>Sort by</span>
+                <select id="sort-resources">
+                  <option value="recent">Most recently added</option>
+                  <option value="name">Alphabetical by name</option>
+                  <option value="category">By category</option>
+                </select>
+              </label>
+              <label class="field">
+                <span>Filter category</span>
+                <select id="filter-category">
+                  <option value="All">All categories</option>
+                  <option value="Emergency">Emergency</option>
+                  <option value="Utility">Utility</option>
+                  <option value="Medical">Medical</option>
+                  <option value="Veterinary">Veterinary</option>
+                  <option value="Neighbor">Neighbor</option>
+                  <option value="School">School</option>
+                  <option value="Work">Work</option>
+                  <option value="Family">Family</option>
+                  <option value="Other">Other</option>
+                </select>
+              </label>
+            </div>
+            <div class="resource-actions screen-only">
+              <button class="button ghost" type="button" id="clear-all-resources">Clear All Resources</button>
+            </div>
+            <div class="saved-resource-list" id="saved-resource-list">
+              <p class="resource-empty" id="resource-empty">No saved resources yet. Add your first local contact using the form.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+        </main>
+    <footer class="site-footer">
+      <div><p class="eyebrow">Rural Safety Guardian</p><p>Use the dashboard, guides, tools, and printable resources to stay organized before and during rural emergencies.</p></div>
+      <div class="footer-links"><a href="index.html">Home</a><a href="local-contacts.html">Contacts</a><a href="weather-outages.html">Weather</a><a href="preparedness-cards.html">Printables</a></div>
+    </footer>
+  </div>
+
+  <script>
+    const storageKey = "ruralGuardianCustomResources";
+
+    const resourceForm = document.querySelector("#resource-form");
+    const resourceIdInput = document.querySelector("#resource-id");
+    const resourceNameInput = document.querySelector("#resource-name");
+    const resourceCategoryInput = document.querySelector("#resource-category");
+    const resourcePhoneInput = document.querySelector("#resource-phone");
+    const resourceNotesInput = document.querySelector("#resource-notes");
+    const clearFormButton = document.querySelector("#clear-form");
+    const clearAllResourcesButton = document.querySelector("#clear-all-resources");
+    const saveResourceButton = document.querySelector("#save-resource");
+    const resourceStatus = document.querySelector("#resource-status");
+    const savedResourceList = document.querySelector("#saved-resource-list");
+    const resourceEmpty = document.querySelector("#resource-empty");
+    const sortResourcesSelect = document.querySelector("#sort-resources");
+    const filterCategorySelect = document.querySelector("#filter-category");
+
+    const categoryMeta = {
+      Emergency: { icon: "!", className: "category-emergency" },
+      Utility: { icon: "~", className: "category-utility" },
+      Medical: { icon: "+", className: "category-medical" },
+      Veterinary: { icon: "P", className: "category-veterinary" },
+      Neighbor: { icon: "N", className: "category-neighbor" },
+      School: { icon: "S", className: "category-school" },
+      Work: { icon: "W", className: "category-work" },
+      Family: { icon: "F", className: "category-family" },
+      Other: { icon: "â€¢", className: "category-other" }
+    };
+
+    function loadResources() {
+      const stored = localStorage.getItem(storageKey);
+
+      if (!stored) {
+        return [];
+      }
+
+      try {
+        const parsed = JSON.parse(stored);
+        return Array.isArray(parsed) ? parsed : [];
+      } catch (error) {
+        return [];
+      }
+    }
+
+    function saveResources(resources) {
+      localStorage.setItem(storageKey, JSON.stringify(resources));
+    }
+
+    function setStatus(message) {
+      resourceStatus.textContent = message;
+    }
+
+    function resetForm() {
+      resourceForm.reset();
+      resourceIdInput.value = "";
+      resourceCategoryInput.value = "Emergency";
+      saveResourceButton.textContent = "Save Resource";
+      setStatus("");
+    }
+
+    function startEdit(resourceId) {
+      const resources = loadResources();
+      const resource = resources.find((entry) => entry.id === resourceId);
+
+      if (!resource) {
+        return;
+      }
+
+      resourceIdInput.value = resource.id;
+      resourceNameInput.value = resource.name;
+      resourceCategoryInput.value = resource.category;
+      resourcePhoneInput.value = resource.phone;
+      resourceNotesInput.value = resource.notes;
+      saveResourceButton.textContent = "Update Resource";
+      setStatus("Editing saved resource.");
+      resourceNameInput.focus();
+    }
+
+    function deleteResource(resourceId) {
+      const resources = loadResources().filter((entry) => entry.id !== resourceId);
+      saveResources(resources);
+      renderResources();
+
+      if (resourceIdInput.value === resourceId) {
+        resetForm();
+      }
+
+      setStatus("Resource deleted from this device.");
+    }
+
+    function getCategoryMeta(category) {
+      return categoryMeta[category] || categoryMeta.Other;
+    }
+
+    function createResourceElement(resource, isOpen) {
+      const article = document.createElement("article");
+      article.className = `print-card saved-resource ${getCategoryMeta(resource.category).className}`;
+
+      if (isOpen) {
+        article.classList.add("is-open");
+      }
+
+      const toggle = document.createElement("button");
+      toggle.className = "print-card-toggle";
+      toggle.type = "button";
+      toggle.setAttribute("aria-expanded", String(isOpen));
+
+      const header = document.createElement("span");
+
+      const badge = document.createElement("span");
+      badge.className = "category-badge";
+
+      const iconMark = document.createElement("span");
+      iconMark.className = "category-icon screen-only";
+      iconMark.textContent = getCategoryMeta(resource.category).icon;
+
+      const tag = document.createElement("span");
+      tag.className = "print-card-tag";
+      tag.textContent = resource.category;
+
+      const title = document.createElement("h4");
+      title.textContent = resource.name;
+
+      badge.append(iconMark, tag);
+      header.append(badge, title);
+
+      const icon = document.createElement("span");
+      icon.className = "print-card-icon";
+      icon.setAttribute("aria-hidden", "true");
+      icon.textContent = isOpen ? "-" : "+";
+
+      toggle.append(header, icon);
+
+      const body = document.createElement("div");
+      body.className = "print-card-body saved-resource-meta";
+      body.hidden = !isOpen;
+
+      const phone = document.createElement("p");
+      phone.innerHTML = "<strong>Phone:</strong> " + resource.phone;
+
+      const notes = document.createElement("p");
+      notes.innerHTML = "<strong>Notes:</strong> " + (resource.notes || "No extra notes added.");
+
+      const actions = document.createElement("div");
+      actions.className = "saved-resource-actions";
+
+      const editButton = document.createElement("button");
+      editButton.className = "button ghost";
+      editButton.type = "button";
+      editButton.textContent = "Edit";
+      editButton.addEventListener("click", () => {
+        startEdit(resource.id);
+      });
+
+      const deleteButton = document.createElement("button");
+      deleteButton.className = "button";
+      deleteButton.type = "button";
+      deleteButton.textContent = "Delete";
+      deleteButton.addEventListener("click", () => {
+        deleteResource(resource.id);
+      });
+
+      actions.append(editButton, deleteButton);
+      body.append(phone, notes, actions);
+
+      toggle.addEventListener("click", () => {
+        const open = toggle.getAttribute("aria-expanded") === "true";
+        toggle.setAttribute("aria-expanded", String(!open));
+        article.classList.toggle("is-open", !open);
+        body.hidden = open;
+        icon.textContent = open ? "+" : "-";
+      });
+
+      article.append(toggle, body);
+      return article;
+    }
+
+    function createCategoryGroup(category, resources, isOpen) {
+      const article = document.createElement("article");
+      article.className = `print-card resource-group ${getCategoryMeta(category).className}`;
+
+      if (isOpen) {
+        article.classList.add("is-open");
+      }
+
+      const toggle = document.createElement("button");
+      toggle.className = "print-card-toggle";
+      toggle.type = "button";
+      toggle.setAttribute("aria-expanded", String(isOpen));
+
+      const header = document.createElement("span");
+      const badge = document.createElement("span");
+      badge.className = "category-badge";
+
+      const iconMark = document.createElement("span");
+      iconMark.className = "category-icon screen-only";
+      iconMark.textContent = getCategoryMeta(category).icon;
+
+      const tag = document.createElement("span");
+      tag.className = "print-card-tag";
+      tag.textContent = `${category} (${resources.length})`;
+
+      const title = document.createElement("h4");
+      title.textContent = `${category} Resources`;
+
+      badge.append(iconMark, tag);
+      header.append(badge, title);
+
+      const icon = document.createElement("span");
+      icon.className = "print-card-icon";
+      icon.setAttribute("aria-hidden", "true");
+      icon.textContent = isOpen ? "-" : "+";
+
+      toggle.append(header, icon);
+
+      const body = document.createElement("div");
+      body.className = "print-card-body resource-group-body";
+      body.hidden = !isOpen;
+
+      resources.forEach((resource, index) => {
+        body.append(createResourceElement(resource, index === 0));
+      });
+
+      toggle.addEventListener("click", () => {
+        const open = toggle.getAttribute("aria-expanded") === "true";
+        toggle.setAttribute("aria-expanded", String(!open));
+        article.classList.toggle("is-open", !open);
+        body.hidden = open;
+        icon.textContent = open ? "+" : "-";
+      });
+
+      article.append(toggle, body);
+      return article;
+    }
+
+    function getVisibleResources() {
+      const resources = loadResources();
+      const filterValue = filterCategorySelect.value;
+      const sortValue = sortResourcesSelect.value;
+
+      const filtered = filterValue === "All"
+        ? resources
+        : resources.filter((resource) => resource.category === filterValue);
+
+      const sorted = [...filtered];
+
+      if (sortValue === "name") {
+        sorted.sort((a, b) => a.name.localeCompare(b.name));
+      } else if (sortValue === "category") {
+        sorted.sort((a, b) => a.category.localeCompare(b.category) || a.name.localeCompare(b.name));
+      } else {
+        sorted.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+      }
+
+      return sorted;
+    }
+
+    function renderResources() {
+      const resources = getVisibleResources();
+      savedResourceList.innerHTML = "";
+
+      if (resources.length === 0) {
+        savedResourceList.append(resourceEmpty);
+        return;
+      }
+
+      const grouped = new Map();
+
+      resources.forEach((resource) => {
+        if (!grouped.has(resource.category)) {
+          grouped.set(resource.category, []);
+        }
+
+        grouped.get(resource.category).push(resource);
+      });
+
+      [...grouped.entries()].forEach(([category, entries], index) => {
+        savedResourceList.append(createCategoryGroup(category, entries, index === 0));
+      });
+    }
+
+    resourceForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      const resources = loadResources();
+      const existingId = resourceIdInput.value;
+      const entry = {
+        id: existingId || String(Date.now()),
+        name: resourceNameInput.value.trim(),
+        category: resourceCategoryInput.value,
+        phone: resourcePhoneInput.value.trim(),
+        notes: resourceNotesInput.value.trim(),
+        createdAt: existingId
+          ? (resources.find((resource) => resource.id === existingId)?.createdAt || Date.now())
+          : Date.now()
+      };
+
+      const nextResources = existingId
+        ? resources.map((resource) => (resource.id === existingId ? entry : resource))
+        : [...resources, entry];
+
+      saveResources(nextResources);
+      renderResources();
+      resetForm();
+      setStatus(existingId ? "Resource updated on this device." : "Resource saved on this device.");
+    });
+
+    clearFormButton.addEventListener("click", () => {
+      resetForm();
+      setStatus("Form cleared.");
+    });
+
+    clearAllResourcesButton.addEventListener("click", () => {
+      const confirmed = window.confirm("Clear all saved resources from this device?");
+
+      if (!confirmed) {
+        return;
+      }
+
+      localStorage.removeItem(storageKey);
+      renderResources();
+      resetForm();
+      setStatus("All saved resources were removed from this device.");
+    });
+
+    sortResourcesSelect.addEventListener("change", () => {
+      renderResources();
+    });
+
+    filterCategorySelect.addEventListener("change", () => {
+      renderResources();
+    });
+
+    renderResources();
+  </script>
+<script>
+  (function () {
+    const menu = document.querySelector("#site-menu");
+    const button = document.querySelector("#site-menu-button");
+
+    if (!menu || !button) {
+      return;
+    }
+
+    const groups = [...menu.querySelectorAll(".site-menu-group")];
+    const groupToggles = [...menu.querySelectorAll(".site-menu-group-toggle")];
+
+    function closeGroups() {
+      groups.forEach((group) => {
+        group.classList.remove("is-open");
+        const toggle = group.querySelector(".site-menu-group-toggle");
+        if (toggle) {
+          toggle.setAttribute("aria-expanded", "false");
+        }
+      });
+    }
+
+    function closeMenu() {
+      menu.classList.remove("is-open");
+      button.setAttribute("aria-expanded", "false");
+      closeGroups();
+    }
+
+    button.addEventListener("click", (event) => {
+      event.stopPropagation();
+      const isOpen = menu.classList.toggle("is-open");
+      button.setAttribute("aria-expanded", String(isOpen));
+      if (!isOpen) {
+        closeGroups();
+      }
+    });
+
+    groupToggles.forEach((toggle) => {
+      toggle.addEventListener("click", (event) => {
+        event.stopPropagation();
+        const group = toggle.closest(".site-menu-group");
+        const willOpen = !group.classList.contains("is-open");
+        closeGroups();
+        if (willOpen) {
+          group.classList.add("is-open");
+          toggle.setAttribute("aria-expanded", "true");
+        }
+      });
+    });
+
+    menu.querySelectorAll("a.site-menu-link").forEach((link) => {
+      link.addEventListener("click", () => {
+        closeMenu();
+      });
+    });
+
+    document.addEventListener("click", (event) => {
+      if (!menu.contains(event.target)) {
+        closeMenu();
+      }
+    });
+  })();
+</script>
+</body>
+</html>
+

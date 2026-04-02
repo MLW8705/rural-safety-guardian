@@ -1,0 +1,552 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cyber Safety | Rural Safety Guardian</title>
+  <meta
+    name="description"
+    content="Cyber safety guidance for rural families, including scam awareness, device setup, and printable quick-reference cards."
+  >
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Source+Sans+3:wght@400;600;700&display=swap"
+    rel="stylesheet"
+  >
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .cyber-shell {
+      display: grid;
+      gap: 22px;
+    }
+
+    .cyber-stack {
+      display: grid;
+      gap: 18px;
+      margin-top: 22px;
+    }
+
+    .cyber-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 14px;
+    }
+
+    .cyber-grid article {
+      padding: 16px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.78);
+    }
+
+    .cyber-grid h5 {
+      margin: 0 0 8px;
+      font: 700 1rem "Outfit", sans-serif;
+    }
+
+    .cyber-grid p {
+      margin: 0;
+      line-height: 1.6;
+    }
+
+    .cyber-note {
+      margin: 0;
+      color: rgba(24, 33, 38, 0.78);
+      line-height: 1.65;
+    }
+
+    .print-card-grid {
+      margin-top: 18px;
+    }
+
+    .cyber-print-card {
+      min-height: 0;
+    }
+
+    .cyber-print-card .print-list {
+      margin-bottom: 0;
+    }
+
+    .card-actions {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 16px;
+    }
+
+    @media (max-width: 860px) {
+      .cyber-grid,
+      .print-card-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media print {
+      .screen-only,
+      .hero,
+      .site-footer,
+      .print-toolbar .button {
+        display: none !important;
+      }
+
+      .print-card-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      body[data-print-card] .cyber-stack > .print-card:not(#cyber-printables) {
+        display: none !important;
+      }
+
+      body[data-print-card] #cyber-printables .print-card-toggle,
+      body[data-print-card] #cyber-printables .cyber-note,
+      body[data-print-card] #cyber-printables .print-toolbar {
+        display: none !important;
+      }
+
+      body[data-print-card] #cyber-print-card-grid > .print-card:not(.is-print-target) {
+        display: none !important;
+      }
+
+      body[data-print-card] #cyber-print-card-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="site-menu screen-only" id="site-menu">
+    <button class="button ghost site-menu-button" type="button" id="site-menu-button" aria-expanded="false">Menu &#9662;</button>
+    <div class="site-menu-panel" id="site-menu-panel">
+      <div class="site-menu-group">
+        <button class="site-menu-group-toggle" type="button" aria-expanded="false">Guides</button>
+        <div class="site-menu-group-panel">
+          <a class="site-menu-link" href="weather-readiness.html">Weather Readiness</a>
+          <a class="site-menu-link" href="hazard-safety.html">Hazard Safety</a>
+          <a class="site-menu-link" href="emergency-kits.html">Emergency Kits &amp; Go-Bags</a>
+          <a class="site-menu-link" href="emergency-planning.html">Emergency Planning</a>
+          <a class="site-menu-link" href="cyber-safety.html">Cyber Safety Basics</a>
+        </div>
+      </div>
+      <div class="site-menu-group">
+        <button class="site-menu-group-toggle" type="button" aria-expanded="false">Tools</button>
+        <div class="site-menu-group-panel">
+          <a class="site-menu-link" href="lost-animals.html">Lost Animals Tracker</a>
+          <a class="site-menu-link" href="weather-outages.html">Weather &amp; Outages Dashboard</a>
+          <a class="site-menu-link" href="road-conditions.html">Road Conditions &amp; Travel Safety</a>
+        </div>
+      </div>
+      <div class="site-menu-group">
+        <button class="site-menu-group-toggle" type="button" aria-expanded="false">Local Resources</button>
+        <div class="site-menu-group-panel">
+          <a class="site-menu-link" href="local-contacts.html">Local Contacts &amp; Resources</a>
+          <a class="site-menu-link" href="lost-pets-livestock.html">Lost Pets &amp; Livestock</a>
+          <a class="site-menu-link" href="local-contacts.html#official-emergency-resources">Official Emergency Resources (U.S.)</a>
+        </div>
+      </div>
+      <div class="site-menu-group">
+        <button class="site-menu-group-toggle" type="button" aria-expanded="false">Printables</button>
+        <div class="site-menu-group-panel">
+          <a class="site-menu-link" href="preparedness-cards.html">Printable Preparedness Cards</a>
+        </div>
+      </div>
+      <div class="site-menu-group">
+        <button class="site-menu-group-toggle" type="button" aria-expanded="false">About</button>
+        <div class="site-menu-group-panel">
+          <a class="site-menu-link" href="about.html">About This Project</a>
+        </div>
+      </div>
+      <div class="site-menu-group">
+        <button class="site-menu-group-toggle" type="button" aria-expanded="false">Home</button>
+        <div class="site-menu-group-panel">
+          <a class="site-menu-link" href="index.html">Home (Dashboard)</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="page-shell">
+    <header class="hero">
+      <nav class="topbar">
+        <div class="brand">
+          <span class="brand-mark">RG</span>
+          <div>
+            <p class="eyebrow">Community Safety Hub</p>
+            <h1>Cyber Safety</h1>
+          </div>
+        </div>
+        <div class="nav-actions">
+          <a class="button ghost screen-only" href="index.html">Back to Main Site</a>
+        </div>
+      </nav>
+
+      <div class="hero-grid">
+        <section class="hero-copy">
+          <p class="eyebrow">Digital Safety for Everyday Life</p>
+          <h2>Protect your accounts, devices, and family from common online risks.</h2>
+          <p class="lede">
+            This page gathers plain-language guidance for safer passwords, scam awareness, device setup, and quick-reference materials that can be printed for home use.
+          </p>
+        </section>
+
+        <aside class="status-panel">
+          <p class="panel-title">Cyber Readiness</p>
+          <div class="status-card">
+            <span class="status-label">Focus Areas</span>
+            <strong>Accounts, devices, and scams</strong>
+            <p class="cyber-note">Good cyber safety habits do not need to be complicated. A few consistent steps make most families much harder to target.</p>
+          </div>
+        </aside>
+      </div>
+    </header>
+
+    <main class="cyber-shell">
+      <section class="section">
+        <div class="section-heading">
+          <p class="eyebrow">Cyber Safety Section</p>
+          <h3>Review practical habits, common scams, and printable reminders for the whole household.</h3>
+        </div>
+
+        <div class="cyber-stack">
+          <article class="print-card accent-cyber is-open">
+            <button class="print-card-toggle" type="button" aria-expanded="true">
+              <span>
+                <span class="print-card-tag">Section 1</span>
+                <h4>Cyber Safety Basics</h4>
+              </span>
+              <span class="print-card-icon" aria-hidden="true">-</span>
+            </button>
+            <div class="print-card-body">
+              <ul class="print-list">
+                <li><strong>Password safety:</strong> Use long, unique passwords for important accounts, especially email, banking, and school logins.</li>
+                <li><strong>MFA:</strong> Turn on multi-factor authentication so a stolen password alone is not enough to get in.</li>
+                <li><strong>Software updates:</strong> Keep phones, laptops, routers, apps, and browsers updated so known security issues get patched.</li>
+                <li><strong>Phishing awareness:</strong> Slow down before clicking urgent links, unexpected invoices, or account warning messages.</li>
+                <li><strong>Safe downloads:</strong> Download apps and files only from trusted official sources, not random links in messages or ads.</li>
+                <li><strong>Device security:</strong> Use screen locks, automatic updates, and device tracking or recovery settings when available.</li>
+                <li><strong>Wi-Fi and router safety:</strong> Change default router passwords, use WPA2/WPA3 security, and keep guest access separate when possible.</li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="print-card accent-evac">
+            <button class="print-card-toggle" type="button" aria-expanded="false">
+              <span>
+                <span class="print-card-tag">Section 2</span>
+                <h4>Common Scams in Rural Areas</h4>
+              </span>
+              <span class="print-card-icon" aria-hidden="true">+</span>
+            </button>
+            <div class="print-card-body" hidden>
+              <div class="cyber-grid">
+                <article><h5>Utility Shutoff Scams</h5><p>Scammers demand instant payment and threaten disconnection. Always contact the utility using the number on your real bill.</p></article>
+                <article><h5>Livestock Sale Scams</h5><p>Fake buyers or sellers may push fast deposits, unusual payment apps, or suspicious shipping promises.</p></article>
+                <article><h5>Facebook Marketplace Scams</h5><p>Be cautious with overpayments, verification code requests, and buyers who refuse normal in-person safety steps.</p></article>
+                <article><h5>Fake Neighbor Messages</h5><p>Messages may pretend to come from someone local asking for money, codes, or emergency help without proof.</p></article>
+                <article><h5>Farm Equipment Scams</h5><p>Listings with prices too good to be true, vague locations, or pressure to pay before inspection are major warning signs.</p></article>
+                <article><h5>FEMA or Disaster Scams</h5><p>After storms, scammers may pose as aid workers or inspectors. Verify identity before sharing money or personal details.</p></article>
+                <article><h5>Romance Scams</h5><p>Scammers build trust over time and then ask for money, gift cards, or account help while avoiding real-world verification.</p></article>
+              </div>
+            </div>
+          </article>
+
+          <article class="print-card accent-info">
+            <button class="print-card-toggle" type="button" aria-expanded="false">
+              <span>
+                <span class="print-card-tag">Section 3</span>
+                <h4>How to Spot a Phishing Message</h4>
+              </span>
+              <span class="print-card-icon" aria-hidden="true">+</span>
+            </button>
+            <div class="print-card-body" hidden>
+              <ul class="print-list">
+                <li>Unexpected urgency like â€œact now,â€ â€œaccount suspended,â€ or â€œpayment overdue.â€</li>
+                <li>Sender names or addresses that look almost right but not fully correct.</li>
+                <li>Links that do not match the company or organization being claimed.</li>
+                <li>Requests for passwords, security codes, banking info, or gift card payments.</li>
+                <li>Poor spelling, odd formatting, or a message tone that feels different from normal.</li>
+                <li>Attachments you were not expecting, especially from unknown senders.</li>
+                <li>Messages trying to bypass normal procedures because of a supposed emergency.</li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="print-card accent-kit">
+            <button class="print-card-toggle" type="button" aria-expanded="false">
+              <span>
+                <span class="print-card-tag">Section 4</span>
+                <h4>Safe Device Setup</h4>
+              </span>
+              <span class="print-card-icon" aria-hidden="true">+</span>
+            </button>
+            <div class="print-card-body" hidden>
+              <ul class="print-list">
+                <li><strong>Phones:</strong> Use a lock screen, app updates, device backup, and location tracking or recovery features.</li>
+                <li><strong>Laptops:</strong> Keep antivirus and system updates on, use separate accounts when possible, and encrypt the device if supported.</li>
+                <li><strong>Tablets:</strong> Apply the same basics as phones: lock code, app review, updates, and restricted install sources.</li>
+                <li><strong>Kids' devices:</strong> Review app permissions, privacy settings, spending controls, and content restrictions before regular use.</li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="print-card accent-family">
+            <button class="print-card-toggle" type="button" aria-expanded="false">
+              <span>
+                <span class="print-card-tag">Section 5</span>
+                <h4>Password &amp; Account Safety Tips</h4>
+              </span>
+              <span class="print-card-icon" aria-hidden="true">+</span>
+            </button>
+            <div class="print-card-body" hidden>
+              <ul class="print-list">
+                <li><strong>Strong passwords:</strong> Aim for long passphrases or randomly generated passwords instead of short reused ones.</li>
+                <li><strong>Safe storage:</strong> Use a trusted password manager or another secure method rather than reusing the same easy password everywhere.</li>
+                <li><strong>MFA importance:</strong> Add multi-factor authentication to email, bank, school, health, and social media accounts.</li>
+                <li><strong>Breach checking:</strong> If an account may be exposed, change the password immediately and review recent account activity.</li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="print-card accent-pet">
+            <button class="print-card-toggle" type="button" aria-expanded="false">
+              <span>
+                <span class="print-card-tag">Section 6</span>
+                <h4>Cyber Safety for Kids &amp; Teens</h4>
+              </span>
+              <span class="print-card-icon" aria-hidden="true">+</span>
+            </button>
+            <div class="print-card-body" hidden>
+              <ul class="print-list">
+                <li><strong>Social media safety:</strong> Keep profiles private, avoid oversharing location details, and think before posting photos or personal information.</li>
+                <li><strong>Cyberbullying signs:</strong> Watch for sudden withdrawal, stress around devices, deleted accounts, or fear after messages arrive.</li>
+                <li><strong>Safe gaming:</strong> Be careful with voice chat, direct messages, fake in-game offers, and pressure to click links or send codes.</li>
+                <li><strong>Privacy settings:</strong> Review them together regularly because apps and platforms change over time.</li>
+                <li><strong>When to involve school or authorities:</strong> Report threats, stalking, extortion, sexual exploitation, or persistent harassment right away.</li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="print-card accent-storm" id="cyber-printables">
+            <button class="print-card-toggle" type="button" aria-expanded="false">
+              <span>
+                <span class="print-card-tag">Section 7</span>
+                <h4>Printable Quick Reference Cards</h4>
+              </span>
+              <span class="print-card-icon" aria-hidden="true">+</span>
+            </button>
+            <div class="print-card-body" hidden>
+              <p class="cyber-note screen-only">Use your browser print option to save these cards as paper handouts or a PDF reference set.</p>
+              <div class="print-toolbar screen-only">
+                <button class="button" type="button" id="print-all-cyber-cards">Print All Cards</button>
+              </div>
+              <div class="print-card-grid" id="cyber-print-card-grid">
+                <article class="print-card accent-family cyber-print-card" id="cyber-card-password">
+                  <p class="print-card-tag">Card 1</p>
+                  <h4>Password &amp; Account Safety</h4>
+                  <ul class="print-list">
+                    <li>Use long, unique passwords for email, banking, and school logins.</li>
+                    <li>Turn on MFA anywhere it is offered, especially for email and financial accounts.</li>
+                    <li>Store passwords in a trusted manager or another secure method, not in reused notes.</li>
+                    <li>Change passwords quickly if an account may be exposed or a device is lost.</li>
+                  </ul>
+                  <div class="card-actions screen-only">
+                    <button class="button ghost print-single-card" type="button" data-print-card="cyber-card-password">Print Card</button>
+                  </div>
+                </article>
+                <article class="print-card accent-evac cyber-print-card" id="cyber-card-phishing">
+                  <p class="print-card-tag">Card 2</p>
+                  <h4>Phishing &amp; Scam Spotting</h4>
+                  <ul class="print-list">
+                    <li>Slow down when a message sounds urgent, threatening, or too good to be true.</li>
+                    <li>Check the sender, the link address, and any phone number before responding.</li>
+                    <li>Never share passwords, security codes, or gift card numbers through messages.</li>
+                    <li>Use official account numbers or known websites instead of message links.</li>
+                  </ul>
+                  <div class="card-actions screen-only">
+                    <button class="button ghost print-single-card" type="button" data-print-card="cyber-card-phishing">Print Card</button>
+                  </div>
+                </article>
+                <article class="print-card accent-kit cyber-print-card" id="cyber-card-devices">
+                  <p class="print-card-tag">Card 3</p>
+                  <h4>Safe Device Setup</h4>
+                  <ul class="print-list">
+                    <li>Use a screen lock, current software updates, and automatic backups on every device.</li>
+                    <li>Turn on device location or recovery settings before an emergency or theft happens.</li>
+                    <li>Review app permissions and remove apps you do not trust or use anymore.</li>
+                    <li>Secure home Wi-Fi with a strong router password and modern encryption.</li>
+                  </ul>
+                  <div class="card-actions screen-only">
+                    <button class="button ghost print-single-card" type="button" data-print-card="cyber-card-devices">Print Card</button>
+                  </div>
+                </article>
+                <article class="print-card accent-pet cyber-print-card" id="cyber-card-kids">
+                  <p class="print-card-tag">Card 4</p>
+                  <h4>Kids &amp; Teens Online Safety</h4>
+                  <ul class="print-list">
+                    <li>Keep profiles private and avoid sharing live location or school schedules publicly.</li>
+                    <li>Talk early about stranger contact, scams in games, and pressure to send photos or codes.</li>
+                    <li>Watch for signs of cyberbullying, isolation, or fear around messages and apps.</li>
+                    <li>Report threats, extortion, or exploitation right away to school staff or authorities.</li>
+                  </ul>
+                  <div class="card-actions screen-only">
+                    <button class="button ghost print-single-card" type="button" data-print-card="cyber-card-kids">Print Card</button>
+                  </div>
+                </article>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+        </main>
+    <footer class="site-footer">
+      <div><p class="eyebrow">Rural Safety Guardian</p><p>Use the dashboard, guides, tools, and printable resources to stay organized before and during rural emergencies.</p></div>
+      <div class="footer-links"><a href="index.html">Home</a><a href="local-contacts.html">Contacts</a><a href="weather-outages.html">Weather</a><a href="preparedness-cards.html">Printables</a></div>
+    </footer>
+  </div>
+
+  <script>
+    const sectionToggles = [...document.querySelectorAll(".print-card-toggle")];
+
+    function toggleCard(toggle) {
+      const card = toggle.closest(".print-card");
+      const body = card?.querySelector(".print-card-body");
+      const icon = toggle.querySelector(".print-card-icon");
+
+      if (!card || !body || !icon) {
+        return;
+      }
+
+      const isOpen = toggle.getAttribute("aria-expanded") === "true";
+      toggle.setAttribute("aria-expanded", String(!isOpen));
+      card.classList.toggle("is-open", !isOpen);
+      body.hidden = isOpen;
+      icon.textContent = isOpen ? "+" : "-";
+    }
+
+    sectionToggles.forEach((toggle) => {
+      toggle.addEventListener("click", () => {
+        toggleCard(toggle);
+      });
+    });
+
+    const printAllCardsButton = document.querySelector("#print-all-cyber-cards");
+    const singleCardButtons = [...document.querySelectorAll(".print-single-card")];
+    const printablesSection = document.querySelector("#cyber-printables");
+
+    function openPrintablesSection() {
+      const toggle = printablesSection?.querySelector(".print-card-toggle");
+      const body = printablesSection?.querySelector(".print-card-body");
+      const icon = toggle?.querySelector(".print-card-icon");
+
+      if (!printablesSection || !toggle || !body || !icon) {
+        return;
+      }
+
+      if (toggle.getAttribute("aria-expanded") === "false") {
+        toggle.setAttribute("aria-expanded", "true");
+        printablesSection.classList.add("is-open");
+        body.hidden = false;
+        icon.textContent = "-";
+      }
+    }
+
+    function clearPrintTarget() {
+      document.body.removeAttribute("data-print-card");
+      document.querySelectorAll(".cyber-print-card").forEach((card) => {
+        card.classList.remove("is-print-target");
+      });
+    }
+
+    if (printAllCardsButton) {
+      printAllCardsButton.addEventListener("click", () => {
+        openPrintablesSection();
+        clearPrintTarget();
+        window.print();
+      });
+    }
+
+    singleCardButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const targetId = button.getAttribute("data-print-card");
+        const targetCard = targetId ? document.getElementById(targetId) : null;
+
+        if (!targetCard) {
+          return;
+        }
+
+        openPrintablesSection();
+        clearPrintTarget();
+        document.body.setAttribute("data-print-card", targetId);
+        targetCard.classList.add("is-print-target");
+        window.print();
+      });
+    });
+
+    window.addEventListener("afterprint", () => {
+      clearPrintTarget();
+    });
+  </script>
+<script>
+  (function () {
+    const menu = document.querySelector("#site-menu");
+    const button = document.querySelector("#site-menu-button");
+
+    if (!menu || !button) {
+      return;
+    }
+
+    const groups = [...menu.querySelectorAll(".site-menu-group")];
+    const groupToggles = [...menu.querySelectorAll(".site-menu-group-toggle")];
+
+    function closeGroups() {
+      groups.forEach((group) => {
+        group.classList.remove("is-open");
+        const toggle = group.querySelector(".site-menu-group-toggle");
+        if (toggle) {
+          toggle.setAttribute("aria-expanded", "false");
+        }
+      });
+    }
+
+    function closeMenu() {
+      menu.classList.remove("is-open");
+      button.setAttribute("aria-expanded", "false");
+      closeGroups();
+    }
+
+    button.addEventListener("click", (event) => {
+      event.stopPropagation();
+      const isOpen = menu.classList.toggle("is-open");
+      button.setAttribute("aria-expanded", String(isOpen));
+      if (!isOpen) {
+        closeGroups();
+      }
+    });
+
+    groupToggles.forEach((toggle) => {
+      toggle.addEventListener("click", (event) => {
+        event.stopPropagation();
+        const group = toggle.closest(".site-menu-group");
+        const willOpen = !group.classList.contains("is-open");
+        closeGroups();
+        if (willOpen) {
+          group.classList.add("is-open");
+          toggle.setAttribute("aria-expanded", "true");
+        }
+      });
+    });
+
+    menu.querySelectorAll("a.site-menu-link").forEach((link) => {
+      link.addEventListener("click", () => {
+        closeMenu();
+      });
+    });
+
+    document.addEventListener("click", (event) => {
+      if (!menu.contains(event.target)) {
+        closeMenu();
+      }
+    });
+  })();
+</script>
+</body>
+</html>
+
